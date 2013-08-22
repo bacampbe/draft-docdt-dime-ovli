@@ -1,0 +1,336 @@
+
+
+
+Diameter Maintenance and Extensions                     J. Korhonen, Ed.
+(DIME)                                                    Renesas Mobile
+Internet-Draft                                           August 22, 2013
+Intended status: Standards Track
+Expires: February 23, 2014
+
+
+                      Dimeter Overload Indication
+                      draft-docdt-dime-ovli-00.txt
+
+Abstract
+
+   This specification documents a Diameter Overload Control Indication
+   and the dissemination of the overload indication information.
+
+Requirements
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on February 23, 2014.
+
+Copyright Notice
+
+   Copyright (c) 2013 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+
+
+
+Korhonen                Expires February 23, 2014               [Page 1]
+
+Internet-Draft         Dimeter Overload Indication           August 2013
+
+
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2.  Terminology and Abbreviations . . . . . . . . . . . . . . . . . 3
+   3.  Solution Overview . . . . . . . . . . . . . . . . . . . . . . . 3
+     3.1.  Architectural Assumptions . . . . . . . . . . . . . . . . . 3
+     3.2.  Clarifications to Diameter Base Protocol  . . . . . . . . . 3
+     3.3.  Dissemination of the Overload Indication  . . . . . . . . . 3
+       3.3.1.  Negotiation and Versioning  . . . . . . . . . . . . . . 3
+       3.3.2.  Transmission of the Attribute Value Pairs . . . . . . . 3
+     3.4.  Overload Condition Indication . . . . . . . . . . . . . . . 3
+   4.  Attribute Value Pairs . . . . . . . . . . . . . . . . . . . . . 3
+     4.1.  xyz AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+     4.2.  abc AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+     4.3.  Attribute Value Pair flag rules . . . . . . . . . . . . . . 4
+   5.  Transport Considerations  . . . . . . . . . . . . . . . . . . . 4
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 4
+     6.1.  AVP codes . . . . . . . . . . . . . . . . . . . . . . . . . 4
+     6.2.  Result-Code values  . . . . . . . . . . . . . . . . . . . . 4
+     6.3.  New registries  . . . . . . . . . . . . . . . . . . . . . . 5
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . . . 5
+   8.  Design Team Members . . . . . . . . . . . . . . . . . . . . . . 5
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . 5
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+     10.1. Normative References  . . . . . . . . . . . . . . . . . . . 5
+     10.2. Informative References  . . . . . . . . . . . . . . . . . . 6
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . . . 6
+     A.1.  3GPP S6a interface overload indication  . . . . . . . . . . 6
+     A.2.  3GPP PCC interfaces overload indication . . . . . . . . . . 6
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Korhonen                Expires February 23, 2014               [Page 2]
+
+Internet-Draft         Dimeter Overload Indication           August 2013
+
+
+1.  Introduction
+
+   ...
+
+   We also need to describe carefully what is in the scope of this
+   document and what is left for the future documents.  Maybe this
+   deserves a new subsection?
+
+
+2.  Terminology and Abbreviations
+
+   ...
+
+
+3.  Solution Overview
+
+3.1.  Architectural Assumptions
+
+   Describe here on what basis the solution is intended to work.  This
+   lists things like piggybacking, end-to-end semantics, role of
+   Diameter agents, etc.
+
+3.2.  Clarifications to Diameter Base Protocol
+
+   Describe here, assuming there is a need, what parts of the existing
+   Diameter Base Protocol [RFC6733] needs clarification in the even of
+   the overload condition.
+
+3.3.  Dissemination of the Overload Indication
+
+   Explain, e.g. the piggybacking of Overload Indication AVPs in this
+   section.  Explain how possible feature negotiation is done?
+
+3.3.1.  Negotiation and Versioning
+
+3.3.2.  Transmission of the Attribute Value Pairs
+
+3.4.  Overload Condition Indication
+
+   Describe here what the overload condition indication is about.
+
+
+4.  Attribute Value Pairs
+
+   This section describes the encoding and semantics of Overload
+   Indication Attribute Value Pairs (AVPs).
+
+
+
+
+
+Korhonen                Expires February 23, 2014               [Page 3]
+
+Internet-Draft         Dimeter Overload Indication           August 2013
+
+
+4.1.  xyz AVP
+
+   ...
+
+4.2.  abc AVP
+
+   ...
+
+4.3.  Attribute Value Pair flag rules
+
+                                                       +---------+
+                                                       |AVP flag |
+                                                       |rules    |
+                                                       +----+----+
+                     AVP   Section                     |    |MUST|
+    Attribute Name   Code  Defined  Value Type         |MUST| NOT|
+   +---------------------------------------------------+----+----+
+   |abc              TBD3  x.x      Grouped            |    | V  |
+   +---------------------------------------------------+----+----+
+   |xyz              TBD4  x.x      Unsigned32         |    | V  |
+   +---------------------------------------------------+----+----+
+
+
+5.  Transport Considerations
+
+   If anything needs to be said beyond what has been defined in
+   Section 3.3.  One candidate is, e.g. the use of SCTP Payload Protocol
+   Identifier (PPID).  Also one might spend some more time discussion
+   the implications of agents between the "client" and the "server".
+
+
+6.  IANA Considerations
+
+6.1.  AVP codes
+
+   New AVPs defined by this specification are listed in Section 4.  All
+   AVP codes allocated from the 'Authentication, Authorization, and
+   Accounting (AAA) Parameters' AVP Codes registry.
+
+6.2.  Result-Code values
+
+   This specification adds...:
+
+   AVP Values | Attribute Name                | Reference
+   -----------+-------------------------------+----------
+    5xxx      | DIAMETER_xx                   | RFCxxxx
+    5xxx      | DIAMETER_xx                   | RFCxxxx
+    5xxx      | DIAMETER_xx                   | RFCxxxx
+
+
+
+Korhonen                Expires February 23, 2014               [Page 4]
+
+Internet-Draft         Dimeter Overload Indication           August 2013
+
+
+6.3.  New registries
+
+   XYZ new registries are needed under the 'Authentication,
+   Authorization, and Accounting (AAA) Parameters' registry:
+
+   o  aaa.
+   o  bbb.
+   o  ccc.
+
+
+7.  Security Considerations
+
+   No end to end security.  We need to live with that.
+
+
+8.  Design Team Members
+
+   This document is a product of the following Diameter Overload Control
+   Design Team members:
+
+   o  Ben Campbell
+   o  Eric McMurry
+   o  Hannes Tschofenig
+   o  Jean-Jacques Trottin
+   o  Jouni Korhonen
+   o  Lionel Morand
+   o  Maria Cruz Bartolome
+   o  Martin Dolly
+   o  Nirav Salot
+   o  Steve Donovan
+   o  Susan Shishufeng
+
+
+9.  Acknowledgements
+
+   ...
+
+
+10.  References
+
+10.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              May 2008.
+
+
+
+Korhonen                Expires February 23, 2014               [Page 5]
+
+Internet-Draft         Dimeter Overload Indication           August 2013
+
+
+   [RFC6733]  Fajardo, V., Arkko, J., Loughney, J., and G. Zorn,
+              "Diameter Base Protocol", RFC 6733, October 2012.
+
+10.2.  Informative References
+
+   [I-D.ietf-dime-overload-reqs]
+              McMurry, E. and B. Campbell, "Diameter Overload Control
+              Requirements", draft-ietf-dime-overload-reqs-10 (work in
+              progress), July 2013.
+
+
+Appendix A.  Examples
+
+A.1.  3GPP S6a interface overload indication
+
+   Would cover S6a MME-HSS communication with several topology choices
+   (such as with or without DRA, and with "generic" agents).
+
+A.2.  3GPP PCC interfaces overload indication
+
+   Would cover Gx/Rx and maybe S9..
+
+
+Author's Address
+
+   Jouni Korhonen (editor)
+   Renesas Mobile
+   Porkkalankatu 24
+   Helsinki  FIN-00180
+   Finland
+
+   Email: jouni.nospam@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Korhonen                Expires February 23, 2014               [Page 6]
+

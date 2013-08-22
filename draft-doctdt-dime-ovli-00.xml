@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'> 
+<!ENTITY RFC2234 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2234.xml'>     
+<!ENTITY RFC3588 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3588.xml'>     
+<!ENTITY RFC4005 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4005.xml'> 
+<!ENTITY RFC4072 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4072.xml'> 
+<!ENTITY RFC3748 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3748.xml'> 
+<!ENTITY RFC4282 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4282.xml'> 
+<!ENTITY RFC4284 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4284.xml'> 
+<!ENTITY RFC4283 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4283.xml'> 
+<!ENTITY RFC2486 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2486.xml'> 
+<!ENTITY RFC2865 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2865.xml'> 
+<!ENTITY RFC5113 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5113.xml'> 
+<!ENTITY RFC1034 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml'> 
+<!ENTITY RFC1035 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml'> 
+<!ENTITY RFC3490 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3490.xml'> 
+<!ENTITY RFC6408 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6408.xml'> 
+<!ENTITY RFC6733 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6733.xml'> 
+<!ENTITY RFC5226 PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'> 
+
+
+<!ENTITY I-D.mcmurry-dime-overload-reqs PUBLIC ''
+'http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-dime-overload-reqs-10'> 
+]>
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc strict="no" ?>
+<?rfc compact="yes" ?><?rfc subcompact="yes" ?>
+<rfc ipr="trust200902"
+
+    category="std"
+     docName="draft-docdt-dime-ovli-00.txt">
+  <front>
+    <title abbrev="Dimeter Overload Indication">Dimeter Overload Indication</title>
+
+    <author role="editor" initials="J" surname="Korhonen" fullname="Jouni Korhonen">
+      <organization>Renesas Mobile</organization>
+         <address>
+                <postal>
+                    <street>Porkkalankatu 24</street>
+                    <city>Helsinki</city>
+                    <code>FIN-00180</code>
+                    <country>Finland</country>
+                </postal>
+                <email>jouni.nospam@gmail.com</email>
+            </address>
+    </author>
+
+
+    <date year="2013"/>
+    <area>Operations and Management</area>
+    <workgroup>Diameter Maintenance and Extensions (DIME)</workgroup>
+    <keyword>Internet-Draft</keyword>
+    <keyword>Diameter</keyword>
+    <keyword>Overload</keyword>
+<abstract>
+ <t>This specification documents a Diameter Overload Control Indication and
+  the dissemination of the overload indication information.
+      </t>
+    </abstract>
+
+  <note title="Requirements">
+   <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in <xref
+   target="RFC2119">RFC 2119</xref>.
+   </t>
+  </note>
+ </front>
+ 
+<middle>
+
+<section title="Introduction" anchor="intro">
+ <t>...
+ </t>
+ <t>We also need to describe carefully what is in the scope of this
+  document and what is left for the future documents. Maybe this
+  deserves a new subsection?
+ </t>
+</section>
+
+<section title="Terminology and Abbreviations" anchor="abbrev">
+ <t>...
+ </t>
+</section>
+
+
+<section title="Solution Overview">
+ <section title="Architectural Assumptions">
+  <t>Describe here on what basis the solution is intended to work. This lists 
+  things like piggybacking, end-to-end semantics, role of Diameter agents, etc.
+  </t>
+ </section>
+
+ <section title="Clarifications to Diameter Base Protocol">
+  <t>Describe here, assuming there is a need, what parts of the
+   existing Diameter Base Protocol <xref target="RFC6733"/> needs
+   clarification in the even of the overload condition.
+  </t>
+ </section>
+
+ <section title="Dissemination of the Overload Indication" anchor="piggy">
+  <t>Explain, e.g. the piggybacking of Overload Indication AVPs in this
+   section. Explain how possible feature negotiation is done?
+  </t>
+  
+  <section title="Negotiation and Versioning">
+  </section>
+
+  <section title="Transmission of the Attribute Value Pairs">
+  </section>
+  
+ </section>
+
+ <section title="Overload Condition Indication">
+  <t>Describe here what the overload condition indication is about.
+  </t>
+ </section>
+
+ 
+</section>
+
+<section title="Attribute Value Pairs" anchor="avps">
+ <t>This section describes the encoding and semantics of
+  Overload Indication Attribute Value Pairs (AVPs).
+ </t>
+ <section title="xyz AVP" anchor="xyz">
+  <t>...
+  </t>
+ </section>
+
+ <section title="abc AVP" anchor="abc">
+  <t>...
+  </t>
+ </section>
+
+ <section title="Attribute Value Pair flag rules">
+  <figure><artwork><![CDATA[
+                                                    +---------+
+                                                    |AVP flag |
+                                                    |rules    |
+                                                    +----+----+
+                  AVP   Section                     |    |MUST|
+ Attribute Name   Code  Defined  Value Type         |MUST| NOT|
++---------------------------------------------------+----+----+
+|abc              TBD3  x.x      Grouped            |    | V  |
++---------------------------------------------------+----+----+
+|xyz              TBD4  x.x      Unsigned32         |    | V  |
++---------------------------------------------------+----+----+
+]]></artwork></figure>
+ </section>
+</section>
+
+
+<section title="Transport Considerations" anchor="transport">
+ <t>If anything needs to be said beyond what has been defined
+  in <xref target="piggy"/>. One candidate is, e.g. the use of
+  SCTP Payload Protocol Identifier (PPID). Also one might spend
+  some more time discussion the implications of agents between the
+  "client" and the "server".
+ </t>
+</section>
+
+
+<section title="IANA Considerations">
+ <section title="AVP codes">
+  <t>New AVPs defined by this specification are listed in <xref target="avps"/>.
+   All AVP codes allocated from the  'Authentication,  Authorization, and
+   Accounting (AAA) Parameters' AVP Codes registry.
+  </t>
+ </section>
+ <section title="Result-Code values">
+  <t>This specification adds...:
+  </t>
+  <figure><artwork><![CDATA[
+AVP Values | Attribute Name                | Reference
+-----------+-------------------------------+----------
+ 5xxx      | DIAMETER_xx                   | RFCxxxx
+ 5xxx      | DIAMETER_xx                   | RFCxxxx
+ 5xxx      | DIAMETER_xx                   | RFCxxxx
+]]></artwork></figure>
+ </section>
+ <section title="New registries">
+ <t>XYZ new registries are needed under the 'Authentication,  Authorization, 
+ and Accounting (AAA) Parameters' registry:
+ </t>
+ <t><list style="symbols">
+  <t>aaa.</t>
+  <t>bbb.</t>
+  <t>ccc.</t>
+ </list>
+ </t>
+ </section>
+</section>
+
+<section title="Security Considerations">
+ <t>No end to end security. We need to live with that.
+ </t>
+</section>
+
+<section title="Design Team Members">
+ <t>This document is a product of the following Diameter Overload Control Design Team
+  members:
+ </t>
+ <t><list style="symbols">
+  <t>Ben Campbell</t>
+  <t>Eric McMurry</t>
+  <t>Hannes Tschofenig</t>
+  <t>Jean-Jacques Trottin</t>
+  <t>Jouni Korhonen</t>
+  <t>Lionel Morand</t>
+  <t>Maria Cruz Bartolome</t>
+  <t>Martin Dolly</t>
+  <t>Nirav Salot</t>
+  <t>Steve Donovan</t>
+  <t>Susan Shishufeng</t>
+ </list>
+ </t>
+</section>
+
+
+<section title="Acknowledgements">
+ <t>...
+ </t>
+</section>
+
+
+</middle>
+
+    <!-- ====================================================================== -->
+
+<back>
+ <references title="Normative References">
+  &RFC2119;
+  &RFC6733;
+  &RFC5226;
+ </references>
+
+ <references title="Informative References">
+  &I-D.mcmurry-dime-overload-reqs;
+ </references>
+
+    <!-- ====================================================================== -->
+
+ <section title="Examples">
+  <section title="3GPP S6a interface overload indication">
+   <t>Would cover S6a MME-HSS communication with several topology
+    choices (such as with or without DRA, and with "generic" agents).
+   </t>
+  </section>
+
+  <section title="3GPP PCC interfaces overload indication">
+   <t>Would cover Gx/Rx and maybe S9.. 
+   </t>
+  </section>
+ </section>
+
+
+
+</back>
+</rfc>
