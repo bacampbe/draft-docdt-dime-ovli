@@ -113,6 +113,82 @@
   <t>Describe here on what basis the solution is intended to work. This lists 
   things like piggybacking, end-to-end semantics, role of Diameter agents, etc.
   </t>
+
+  <section title="Diameter Agent Behaviour">
+   <t>In the context of the Diameter Overload Indication dissemination and reacting to
+    the overload information, the functional behaviour of the Diameter agnets in front
+    of servers, especially concerning Diameter proxies, has to be common. This is
+    topical since intelligent Diameter agents may actively participate to the
+    overload condition handling (such as do intelligent next hop selection based on
+    the overload conditions or aggregate overload information to be disseminated).
+    Further, Diameter agents
+    may also have other deployment related tasks that are not defined in the Diameter
+    base protocol <xref target="RFC6733"/>. These include, among others, topology hiding
+    and acting as a server representative for a cluster of real Diameter servers for the
+    Diameter client. To be efficient, such network topologies imply that the Diameter
+    agents in front of servers remain in the Diameter signaling path for all the messages
+    related to the same session/user.
+   </t>
+   <t>Since the solution defined in this specification MUST NOT break the Diameter
+    base protocol assumptions at any time, great care has to be taken not to assume
+    functionality from the Diameter agents that would, at the base protocol level and
+    between two Diameter end nodes break or assume functionality beyond the
+    Diameter base protocol. Effectively this means the following from a Diameter agent:
+   </t>
+   <t>
+    <list style="symbols">
+    <t>A Diameter agent that impersonates itself as the "end node", i.e. the server to a
+     Diameter client MUST NOT leak any Diameter base protocol level information of the
+     Diameter nodes behind it. From the Diameter client point of view the final
+     destination to its requests and the original source for the answers MUST be the
+     Diameter agent. Effectively this requirement means the Diameter agent acts as a
+     back-to-back-agent. How the Diameter agent in this case appears to the Diameter
+     nodes it is representing (i.e. the real Diameter servers), is an implementation and
+     a deployment specific within the realm the Diameter agent is deployed.
+    <vspace blankLines="1"/></t>
+    
+    <t>This requirement also implies that if the Diameter agent is not
+     able to impersonate the servers behind it, the Diameter dialogue is always
+     established between clients and servers and any overload information received
+     by a client would be from a given server identified by the Origin-Host identity.
+    </t>
+    </list>
+   </t>
+    
+   
+  </section>
+
+  <section title="Simplified Example Architecture">
+   <t>**Early Draft!**
+   </t>
+
+<figure title="Simplified architecture choices for overload indication delivery">
+ <artwork><![CDATA[
+ Realm X                                  Other Realms
+<--------------------------------------> <---------------------->
+
++--^-----+                 : (optional) :
+|Diameter|                 :            :
+|Server A|--+     .--.     : +---^----+ :     .--.     
++--------+  |   _(    `.   : |Diameter| :   _(    `.   +---^----+
+            +--(        )--:-|  Agent |-:--(        )--|Diameter|
++--------+  | ( `  .  )  ) : +-----^--+ : ( `  .  )  ) | Client |
+|Diameter|--+  `--(___.-'  :            :  `--(___.-'  +-----^--+
+|Server B|                 :            :
++---^----+                 :            :
+            Overload Indication A    Overload Indication A'
+       1)  <----------------------> <---------------------->
+           standard base protocol   standard base protocol
+
+            End-to-end Overload Indication
+       2)  <----------------------------------------------->
+                       standard base protocol
+
+
+]]></artwork></figure>
+  </section>
+
+
  </section>
 
  <section title="Clarifications to Diameter Base Protocol">

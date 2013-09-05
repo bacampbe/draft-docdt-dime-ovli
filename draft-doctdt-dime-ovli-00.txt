@@ -3,9 +3,9 @@
 
 Diameter Maintenance and Extensions                     J. Korhonen, Ed.
 (DIME)                                                    Renesas Mobile
-Internet-Draft                                           August 22, 2013
+Internet-Draft                                         September 5, 2013
 Intended status: Standards Track
-Expires: February 23, 2014
+Expires: March 9, 2014
 
 
                       Dimeter Overload Indication
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 23, 2014.
+   This Internet-Draft will expire on March 9, 2014.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Korhonen                Expires February 23, 2014               [Page 1]
+Korhonen                  Expires March 9, 2014                 [Page 1]
 
-Internet-Draft         Dimeter Overload Indication           August 2013
+Internet-Draft         Dimeter Overload Indication        September 2013
 
 
    to this document.  Code Components extracted from this document must
@@ -69,30 +69,32 @@ Table of Contents
    2.  Terminology and Abbreviations . . . . . . . . . . . . . . . . . 3
    3.  Solution Overview . . . . . . . . . . . . . . . . . . . . . . . 3
      3.1.  Architectural Assumptions . . . . . . . . . . . . . . . . . 3
-     3.2.  Clarifications to Diameter Base Protocol  . . . . . . . . . 3
-     3.3.  Dissemination of the Overload Indication  . . . . . . . . . 3
-       3.3.1.  Negotiation and Versioning  . . . . . . . . . . . . . . 3
-       3.3.2.  Transmission of the Attribute Value Pairs . . . . . . . 3
-     3.4.  Overload Condition Indication . . . . . . . . . . . . . . . 3
-   4.  Attribute Value Pairs . . . . . . . . . . . . . . . . . . . . . 3
-     4.1.  xyz AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-     4.2.  abc AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-     4.3.  Attribute Value Pair flag rules . . . . . . . . . . . . . . 4
-   5.  Transport Considerations  . . . . . . . . . . . . . . . . . . . 4
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 4
-     6.1.  AVP codes . . . . . . . . . . . . . . . . . . . . . . . . . 4
-     6.2.  Result-Code values  . . . . . . . . . . . . . . . . . . . . 4
-     6.3.  New registries  . . . . . . . . . . . . . . . . . . . . . . 5
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . . . 5
-   8.  Design Team Members . . . . . . . . . . . . . . . . . . . . . . 5
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . 5
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . . . 5
-     10.1. Normative References  . . . . . . . . . . . . . . . . . . . 5
-     10.2. Informative References  . . . . . . . . . . . . . . . . . . 6
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . . . 6
-     A.1.  3GPP S6a interface overload indication  . . . . . . . . . . 6
-     A.2.  3GPP PCC interfaces overload indication . . . . . . . . . . 6
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 6
+       3.1.1.  Diameter Agent Behaviour  . . . . . . . . . . . . . . . 3
+       3.1.2.  Simplified Example Architecture . . . . . . . . . . . . 4
+     3.2.  Clarifications to Diameter Base Protocol  . . . . . . . . . 5
+     3.3.  Dissemination of the Overload Indication  . . . . . . . . . 5
+       3.3.1.  Negotiation and Versioning  . . . . . . . . . . . . . . 5
+       3.3.2.  Transmission of the Attribute Value Pairs . . . . . . . 5
+     3.4.  Overload Condition Indication . . . . . . . . . . . . . . . 5
+   4.  Attribute Value Pairs . . . . . . . . . . . . . . . . . . . . . 5
+     4.1.  xyz AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+     4.2.  abc AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+     4.3.  Attribute Value Pair flag rules . . . . . . . . . . . . . . 5
+   5.  Transport Considerations  . . . . . . . . . . . . . . . . . . . 6
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 6
+     6.1.  AVP codes . . . . . . . . . . . . . . . . . . . . . . . . . 6
+     6.2.  Result-Code values  . . . . . . . . . . . . . . . . . . . . 6
+     6.3.  New registries  . . . . . . . . . . . . . . . . . . . . . . 6
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . . . 6
+   8.  Design Team Members . . . . . . . . . . . . . . . . . . . . . . 6
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . 7
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+     10.1. Normative References  . . . . . . . . . . . . . . . . . . . 7
+     10.2. Informative References  . . . . . . . . . . . . . . . . . . 7
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . . . 7
+     A.1.  3GPP S6a interface overload indication  . . . . . . . . . . 7
+     A.2.  3GPP PCC interfaces overload indication . . . . . . . . . . 8
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 8
 
 
 
@@ -106,11 +108,9 @@ Table of Contents
 
 
 
-
-
-Korhonen                Expires February 23, 2014               [Page 2]
+Korhonen                  Expires March 9, 2014                 [Page 2]
 
-Internet-Draft         Dimeter Overload Indication           August 2013
+Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 1.  Introduction
@@ -134,6 +134,96 @@ Internet-Draft         Dimeter Overload Indication           August 2013
    Describe here on what basis the solution is intended to work.  This
    lists things like piggybacking, end-to-end semantics, role of
    Diameter agents, etc.
+
+3.1.1.  Diameter Agent Behaviour
+
+   In the context of the Diameter Overload Indication dissemination and
+   reacting to the overload information, the functional behaviour of the
+   Diameter agnets in front of servers, especially concerning Diameter
+   proxies, has to be common.  This is topical since intelligent
+   Diameter agents may actively participate to the overload condition
+   handling (such as do intelligent next hop selection based on the
+   overload conditions or aggregate overload information to be
+   disseminated).  Further, Diameter agents may also have other
+   deployment related tasks that are not defined in the Diameter base
+   protocol [RFC6733].  These include, among others, topology hiding and
+   acting as a server representative for a cluster of real Diameter
+   servers for the Diameter client.  To be efficient, such network
+   topologies imply that the Diameter agents in front of servers remain
+   in the Diameter signaling path for all the messages related to the
+   same session/user.
+
+   Since the solution defined in this specification MUST NOT break the
+   Diameter base protocol assumptions at any time, great care has to be
+   taken not to assume functionality from the Diameter agents that
+   would, at the base protocol level and between two Diameter end nodes
+   break or assume functionality beyond the Diameter base protocol.
+   Effectively this means the following from a Diameter agent:
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 3]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+   o  A Diameter agent that impersonates itself as the "end node", i.e.
+      the server to a Diameter client MUST NOT leak any Diameter base
+      protocol level information of the Diameter nodes behind it.  From
+      the Diameter client point of view the final destination to its
+      requests and the original source for the answers MUST be the
+      Diameter agent.  Effectively this requirement means the Diameter
+      agent acts as a back-to-back-agent.  How the Diameter agent in
+      this case appears to the Diameter nodes it is representing (i.e.
+      the real Diameter servers), is an implementation and a deployment
+      specific within the realm the Diameter agent is deployed.
+
+   o  This requirement also implies that if the Diameter agent is not
+      able to impersonate the servers behind it, the Diameter dialogue
+      is always established between clients and servers and any overload
+      information received by a client would be from a given server
+      identified by the Origin-Host identity.
+
+3.1.2.  Simplified Example Architecture
+
+   **Early Draft!**
+
+    Realm X                                  Other Realms
+   <--------------------------------------> <---------------------->
+
+   +--^-----+                 : (optional) :
+   |Diameter|                 :            :
+   |Server A|--+     .--.     : +---^----+ :     .--.
+   +--------+  |   _(    `.   : |Diameter| :   _(    `.   +---^----+
+               +--(        )--:-|  Agent |-:--(        )--|Diameter|
+   +--------+  | ( `  .  )  ) : +-----^--+ : ( `  .  )  ) | Client |
+   |Diameter|--+  `--(___.-'  :            :  `--(___.-'  +-----^--+
+   |Server B|                 :            :
+   +---^----+                 :            :
+               Overload Indication A    Overload Indication A'
+          1)  <----------------------> <---------------------->
+              standard base protocol   standard base protocol
+
+               End-to-end Overload Indication
+          2)  <----------------------------------------------->
+                          standard base protocol
+
+
+
+     Simplified architecture choices for overload indication delivery
+
+
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 4]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
 
 3.2.  Clarifications to Diameter Base Protocol
 
@@ -160,15 +250,6 @@ Internet-Draft         Dimeter Overload Indication           August 2013
    This section describes the encoding and semantics of Overload
    Indication Attribute Value Pairs (AVPs).
 
-
-
-
-
-Korhonen                Expires February 23, 2014               [Page 3]
-
-Internet-Draft         Dimeter Overload Indication           August 2013
-
-
 4.1.  xyz AVP
 
    ...
@@ -190,6 +271,14 @@ Internet-Draft         Dimeter Overload Indication           August 2013
    +---------------------------------------------------+----+----+
    |xyz              TBD4  x.x      Unsigned32         |    | V  |
    +---------------------------------------------------+----+----+
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 5]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 5.  Transport Considerations
@@ -218,13 +307,6 @@ Internet-Draft         Dimeter Overload Indication           August 2013
     5xxx      | DIAMETER_xx                   | RFCxxxx
     5xxx      | DIAMETER_xx                   | RFCxxxx
 
-
-
-Korhonen                Expires February 23, 2014               [Page 4]
-
-Internet-Draft         Dimeter Overload Indication           August 2013
-
-
 6.3.  New registries
 
    XYZ new registries are needed under the 'Authentication,
@@ -244,6 +326,16 @@ Internet-Draft         Dimeter Overload Indication           August 2013
 
    This document is a product of the following Diameter Overload Control
    Design Team members:
+
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 6]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
 
    o  Ben Campbell
    o  Eric McMurry
@@ -274,13 +366,6 @@ Internet-Draft         Dimeter Overload Indication           August 2013
               IANA Considerations Section in RFCs", BCP 26, RFC 5226,
               May 2008.
 
-
-
-Korhonen                Expires February 23, 2014               [Page 5]
-
-Internet-Draft         Dimeter Overload Indication           August 2013
-
-
    [RFC6733]  Fajardo, V., Arkko, J., Loughney, J., and G. Zorn,
               "Diameter Base Protocol", RFC 6733, October 2012.
 
@@ -298,6 +383,15 @@ A.1.  3GPP S6a interface overload indication
 
    Would cover S6a MME-HSS communication with several topology choices
    (such as with or without DRA, and with "generic" agents).
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 7]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
 
 A.2.  3GPP PCC interfaces overload indication
 
@@ -332,5 +426,23 @@ Author's Address
 
 
 
-Korhonen                Expires February 23, 2014               [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 8]
 
