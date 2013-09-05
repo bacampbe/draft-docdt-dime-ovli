@@ -113,6 +113,199 @@
   <t>Describe here on what basis the solution is intended to work. This lists 
   things like piggybacking, end-to-end semantics, role of Diameter agents, etc.
   </t>
+  
+  <section title="Application Classification">
+      <t>
+        The following is a classification of Diameter applications and requests.  This discussion is meant to                document factors that play into decisions made by the Diameter identity responsible for handling overload            reports.
+      </t>
+
+<t>
+Section 8.1 of RFC6733 defines two state machines that imply two types of applications, session-less and session-based.  The primary differentiator between these types of applications is the lifetime of Session-IDs.  
+</t>
+<t>
+For session-based applications, the session-id is used to tie multiple requests into a single session.  
+</t>
+<t>
+In session-less applications, the lifetime of the session-id is a single Diameter transaction.
+</t>
+<t>
+The 3GPP-defined S6a application is an example of a session-less application.  The following, copied from section 7.1.4 of 29.272, explicitly states that sessions are implicitly terminated and that the server does not maintain session state:
+</t>
+
+<list>
+<t>
+"Between the MME and the HSS and between the SGSN and the HSS and between the MME and the EIR, Diameter sessions shall be implicitly terminated. An implicitly terminated session is one for which the server does not maintain state information. The client shall not send any re-authorization or session termination requests to the server.
+</t>
+<t>
+The Diameter base protocol includes the Auth-Session-State AVP as the mechanism for the implementation of implicitly terminated sessions.
+</t>
+<t>
+The client (server) shall include in its requests (responses) the Auth-Session-State AVP set to the value NO_STATE_MAINTAINED (1), as described in IETF RFC 3588 [4]. As a consequence, the server shall not maintain any state information about this session and the client shall not send any session termination request. Neither the Authorization-Lifetime AVP nor the Session-Timeout AVP shall be present in requests or responses."
+</t>
+</list>
+<t>
+For the purposes of this discussion, session-less applications are further divided into two types of applications:
+</t>
+
+<list style=’symbols’>
+<t>
+- Stateless applications - Requests within a stateless application have no relationship to each other.  The 3GPP defined S13 application is an example of a stateless application.
+</t>
+<t>
+- Pseudo-session applications - While this class of application does not use the Diameter Session-ID AVP to correlate requests, there is an implied ordering of transactions defined by the application.  The 3GPP defined Cx application is an example of a pseudo-session application.
+</t>
+</list>
+
+<t>
+The accounting application defined in RFC6733 and the Credit-Control application defined in RFC4006 are examples of Diameter session-based applications.
+</t>
+<t>
+The handling of overload reports must take the type of application into consideration, as discussed in section xxxxx.
+</t>
+
+  </section>
+  
+  <section title="Application Type Overload Implications">
+
+<t>
+This section discusses considerations for mitigating overload reported by a Diameter entity.  This discussion focuses on the type of application.  Section xxxx discussion considerations for handling various request types when the target server is known to be in an overloaded state.  Section xxxx discusses considerations for handling overload conditions based on the network deployment scenario.
+</t>
+<t>
+These discussions assume that the strategy for mitigating the reported overload is to reduce the overall workload on the overloaded entity.  The concept of applying overload treatment to requests targeted for an overloaded Diameter entity is inherent to this discussion.  The overload treatment is not specified here but could include routing the request to another Diameter entity known to be able to handle the request.  Overload treatment could also include rejecting the request.  For a Diameter agent, rejecting a request will generally mean rejecting could be generating an appropriate Diameter error response   For a Diameter client, rejecting the request could mean giving an indication to the entity requesting the Diameter service that the network is busy and to try again later.
+</t>
+<t>
+Stateless applications - By definition there is no relationship between individual requests in a stateless application.  As a result, when a request is sent or relayed to an overloaded Diameter entity -- either a Diameter Server or a Diameter Agent -- the sending/relaying entity can choose to apply overload treatment to any request targeted for the overloaded entity.
+</t>
+<t>
+Pseudo stateful applications – Pseudo stateful applications are also stateless applications in that there is no session Diameter state maintained between transactions.  There is, however, an implied ordering of requests.  As a result, decisions about which transactions to reject as a result of an overloaded entity could/should take the command-code of the request into consideration.  This generally means that transactions later in the sequence of transactions should be given more favorable treatment than messages earlier in the sequence.   This is because more work has already been done by the Diameter network for those transactions that occur later in the sequence.  Rejecting them could result in increasing the load on the network as the transactions earlier in the sequence might also need to be repeated.
+</t>
+<t>
+Stateful applications – Overload handling for stateful applications must take into consideration the work associated with setting up an maintaining a session.  As such, the entity handling overload of a Diameter entity for a stateful application might tend to reject new session requests before rejecting intra-session requests.  In addition, session ending requests might be given a lower priority of being rejected as rejecting session ending requests could result in session status being out of sync between the Diameter clients and servers.
+</t>
+      
+      
+  </section>
+  <section title="Request Transaction Classification">
+<t>
+Independent Request - An independent request is not a part of a Diameter session and, as such, the lifetime of the session-id is constrained to an individual transaction.  
+</t>
+<t>
+Session-Initiating Request - A session-initiating request is the initial message that establishes a Diameter session.  The ACR message defined in RFC 6733 is an example of a session-initiating request.
+</t>
+<t>
+Correlated Session-Initiating Request - There are cases, most notably in the 3GPP PCC architecture, where multiple Diameter sessions are correlated and must be handled by the same Diameter server.  This is a special case of a Session-Initiating Request.  Gx CCR-I requests and Rx AAR messages are examples of correlated session-initiating requests.
+</t>
+<t>
+Intra-Session Request - An intra session request is a request that uses a session-id for an already established request.  An intra session request generally needs to be delivered to the server that handled the session creating request for the session.  The STR message defined in RFC 6733 is an example of an intra-session requests.  CCR-U and CCR-T requests defined in RFC4006 are further examples of intra-session requests.
+</t>
+<t>
+Pseudo-Session Requests - Pseudo session requests are independent requests and, as such, the request transactions are not tied together using the Diameter session-id.  There exist Diameter applications that define an expected ordering of transactions.  This sequencing of independent transactions results in a pseudo session.  The AIR, MAR and SAR requests in the 3GPP defined Cx application are examples of pseudo-session requests.
+</t>
+      
+  </section>
+  
+  <section title="Request Type Overload Implications">
+      
+<t>
+Independent requests - Independent requests can be given equal treatment when making throttling decisions.
+</t>
+<t>
+Session-creating requests – Session-creating requests represent more work than independent or intra-session requests.   As such, throttling decisions might favor intra-session requests over session-creating requests.  Individual session-creating requests can be given equal treatment when making throttling decisions.
+</t>
+<t>
+Correlated session-creating requests – Requests that result in a new binding, where the binding is used for routing of subsequent session-creating requests, represent more work than all other requests.  As such, these requests might be throttled more frequently than other request types.
+</t>
+<t>
+Pseudo-session requests – Throttling decisions for pseudo-session requests can take where individual requests fit into the overall sequence of requests within the pseudo session.  Requests that are earlier in the sequence might be throttled more aggressively than requests that occur later in the sequence.
+</t>
+<t>
+Intra-session requests – There are two classes of intra-sessions requests.  The first is a request that ends a session.  The second is a request that is used to convey session related state between the Diameter client and server.  Session ending request should be throttled less aggressively in order to keep session state consistent between the client and server.  The default handling of other intra-session requests might be to treat them equally when making throttling decisions.   There might also be application level considerations whether some request types are favored over others.
+</t>
+      
+  </section>
+  
+  <section title="Diameter Deployment Scenarios">
+      
+<t>
+This section discusses various Diameter network deployment scenarios and the implications of those deployment models on handling of overload reports.
+</t>
+<t>
+The scenarios vary based on the following:
+</t>
+
+<list style=’symbols”>
+<t>
+The presence or absence of Diameter agents
+</t>
+<t>
+Which Diameter entities support the DOC extension
+</t>
+<t>
+The amount of the network topology understood by Diameter clients
+</t>
+<t>
+The complexity of the Diameter server deployment for a Diameter application
+</t>
+<t>
+Number of Diameter applications supported by Diameter clients and Diameter servers
+</t>
+</list>
+
+<t>
+Without consideration for which elements support the DOC extension, the following is a representative list of deployment scenarios:
+</t>
+<list style=’symbols’>
+<t>
+Client <-> Server
+</t>
+<t>
+Client <-> Multiple equivalent servers
+</t>
+<t>
+Client <-> Agent <-> Multiple equivalent servers
+</t>
+<t>
+Client <-> Agent [ <-> Agent ] <-> Partitioned server
+</t>
+<t>
+Client <-> Edge Agent [ <-> Edge Agent] <-> { Multiple Equivalent Servers | Partitioned Servers }
+</t>
+<t>
+Client <-> Session Correlating Agent <-> Multiple Equivalent Servers
+</t>
+</list>
+
+<t>
+The following is a list of representative deployment scenarios:
+</t>
+
+<list style=symbols>
+<t>
+Direct connection between a DOC client and a DOC server
+</t>
+<t>
+DOC client <-> non-DOC agent <-> DOC server
+</t>
+<t>
+DOC client <-> DOC agent <-> DOC server
+</t>
+<t>
+Non-DOC client <-> DOC agent <-> DOC server
+</t>
+<t>
+Non-DOC client <-> DOC agent <-> Mix of DOC and non-DOC servers
+</t>
+<t>
+DOC client <-> agent <-> Partitioned/Segmented DOC server
+</t>
+<t>
+DOC client <-> agent <-> agent <-> Partitioned/Segmented DOC server
+</t>
+<t>
+DOC client <-> edge agent <-> edge agent <-> DOC server
+</t>
+      
+  </section>
 
   <section title="Diameter Agent Behaviour">
    <t>In the context of the Diameter Overload Indication dissemination and reacting to
