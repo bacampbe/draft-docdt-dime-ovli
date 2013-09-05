@@ -65,41 +65,41 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
-   2.  Terminology and Abbreviations . . . . . . . . . . . . . . . . . 3
-   3.  Solution Overview . . . . . . . . . . . . . . . . . . . . . . . 3
-     3.1.  Architectural Assumptions . . . . . . . . . . . . . . . . . 3
-       3.1.1.  Diameter Agent Behaviour  . . . . . . . . . . . . . . . 3
-       3.1.2.  Simplified Example Architecture . . . . . . . . . . . . 4
-     3.2.  Clarifications to Diameter Base Protocol  . . . . . . . . . 5
-     3.3.  Dissemination of the Overload Indication  . . . . . . . . . 5
-       3.3.1.  Negotiation and Versioning  . . . . . . . . . . . . . . 5
-       3.3.2.  Transmission of the Attribute Value Pairs . . . . . . . 5
-     3.4.  Overload Condition Indication . . . . . . . . . . . . . . . 5
-   4.  Attribute Value Pairs . . . . . . . . . . . . . . . . . . . . . 5
-     4.1.  xyz AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 5
-     4.2.  abc AVP . . . . . . . . . . . . . . . . . . . . . . . . . . 5
-     4.3.  Attribute Value Pair flag rules . . . . . . . . . . . . . . 5
-   5.  Transport Considerations  . . . . . . . . . . . . . . . . . . . 6
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 6
-     6.1.  AVP codes . . . . . . . . . . . . . . . . . . . . . . . . . 6
-     6.2.  Result-Code values  . . . . . . . . . . . . . . . . . . . . 6
-     6.3.  New registries  . . . . . . . . . . . . . . . . . . . . . . 6
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . . . 6
-   8.  Design Team Members . . . . . . . . . . . . . . . . . . . . . . 6
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . 7
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . . . 7
-     10.1. Normative References  . . . . . . . . . . . . . . . . . . . 7
-     10.2. Informative References  . . . . . . . . . . . . . . . . . . 7
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . . . 7
-     A.1.  3GPP S6a interface overload indication  . . . . . . . . . . 7
-     A.2.  3GPP PCC interfaces overload indication . . . . . . . . . . 8
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 8
-
-
-
-
-
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   2.  Terminology and Abbreviations  . . . . . . . . . . . . . . . .  3
+   3.  Solution Overview  . . . . . . . . . . . . . . . . . . . . . .  3
+     3.1.  Architectural Assumptions  . . . . . . . . . . . . . . . .  3
+       3.1.1.  Application Classification . . . . . . . . . . . . . .  3
+       3.1.2.  Application Type Overload Implications . . . . . . . .  4
+       3.1.3.  Request Transaction Classification . . . . . . . . . .  5
+       3.1.4.  Request Type Overload Implications . . . . . . . . . .  6
+       3.1.5.  Diameter Deployment Scenarios  . . . . . . . . . . . .  7
+       3.1.6.  Diameter Agent Behaviour . . . . . . . . . . . . . . .  8
+       3.1.7.  Simplified Example Architecture  . . . . . . . . . . .  9
+     3.2.  Clarifications to Diameter Base Protocol . . . . . . . . . 10
+     3.3.  Dissemination of the Overload Indication . . . . . . . . . 10
+       3.3.1.  Negotiation and Versioning . . . . . . . . . . . . . . 10
+       3.3.2.  Transmission of the Attribute Value Pairs  . . . . . . 10
+     3.4.  Overload Condition Indication  . . . . . . . . . . . . . . 10
+   4.  Attribute Value Pairs  . . . . . . . . . . . . . . . . . . . . 10
+     4.1.  xyz AVP  . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     4.2.  abc AVP  . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     4.3.  Attribute Value Pair flag rules  . . . . . . . . . . . . . 10
+   5.  Transport Considerations . . . . . . . . . . . . . . . . . . . 11
+   6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 11
+     6.1.  AVP codes  . . . . . . . . . . . . . . . . . . . . . . . . 11
+     6.2.  Result-Code values . . . . . . . . . . . . . . . . . . . . 11
+     6.3.  New registries . . . . . . . . . . . . . . . . . . . . . . 11
+   7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 11
+   8.  Design Team Members  . . . . . . . . . . . . . . . . . . . . . 11
+   9.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 12
+   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+     10.1. Normative References . . . . . . . . . . . . . . . . . . . 12
+     10.2. Informative References . . . . . . . . . . . . . . . . . . 12
+   Appendix A.  Examples  . . . . . . . . . . . . . . . . . . . . . . 13
+     A.1.  3GPP S6a interface overload indication . . . . . . . . . . 13
+     A.2.  3GPP PCC interfaces overload indication  . . . . . . . . . 13
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 13
 
 
 
@@ -135,7 +135,287 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    lists things like piggybacking, end-to-end semantics, role of
    Diameter agents, etc.
 
-3.1.1.  Diameter Agent Behaviour
+3.1.1.  Application Classification
+
+   The following is a classification of Diameter applications and
+   requests.  This discussion is meant to document factors that play
+   into decisions made by the Diameter identity responsible for handling
+   overload reports.
+
+   Section 8.1 of RFC6733 defines two state machines that imply two
+   types of applications, session-less and session-based.  The primary
+   differentiator between these types of applications is the lifetime of
+   Session-IDs.
+
+   For session-based applications, the session-id is used to tie
+   multiple requests into a single session.
+
+   In session-less applications, the lifetime of the session-id is a
+   single Diameter transaction.
+
+   The 3GPP-defined S6a application is an example of a session-less
+   application.  The following, copied from section 7.1.4 of 29.272,
+   explicitly states that sessions are implicitly terminated and that
+   the server does not maintain session state:
+
+      "Between the MME and the HSS and between the SGSN and the HSS and
+      between the MME and the EIR, Diameter sessions shall be implicitly
+      terminated.  An implicitly terminated session is one for which the
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 3]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+      server does not maintain state information.  The client shall not
+      send any re-authorization or session termination requests to the
+      server.
+
+      The Diameter base protocol includes the Auth-Session-State AVP as
+      the mechanism for the implementation of implicitly terminated
+      sessions.
+
+      The client (server) shall include in its requests (responses) the
+      Auth-Session-State AVP set to the value NO_STATE_MAINTAINED (1),
+      as described in [RFC6733].  As a consequence, the server shall not
+      maintain any state information about this session and the client
+      shall not send any session termination request.  Neither the
+      Authorization-Lifetime AVP nor the Session-Timeout AVP shall be
+      present in requests or responses."
+
+   For the purposes of this discussion, session-less applications are
+   further divided into two types of applications:
+
+   o  Stateless applications - Requests within a stateless application
+      have no relationship to each other.  The 3GPP defined S13
+      application is an example of a stateless application.
+
+   o  Pseudo-session applications - While this class of application does
+      not use the Diameter Session-ID AVP to correlate requests, there
+      is an implied ordering of transactions defined by the application.
+      The 3GPP defined Cx application is an example of a pseudo-session
+      application.
+
+   The accounting application defined in RFC6733 and the Credit-Control
+   application defined in RFC4006 are examples of Diameter session-based
+   applications.
+
+   The handling of overload reports must take the type of application
+   into consideration, as discussed in section xxxxx.
+
+3.1.2.  Application Type Overload Implications
+
+   This section discusses considerations for mitigating overload
+   reported by a Diameter entity.  This discussion focuses on the type
+   of application.  Section xxxx discussion considerations for handling
+   various request types when the target server is known to be in an
+   overloaded state.  Section xxxx discusses considerations for handling
+   overload conditions based on the network deployment scenario.
+
+   These discussions assume that the strategy for mitigating the
+   reported overload is to reduce the overall workload on the overloaded
+   entity.  The concept of applying overload treatment to requests
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 4]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+   targeted for an overloaded Diameter entity is inherent to this
+   discussion.  The overload treatment is not specified here but could
+   include routing the request to another Diameter entity known to be
+   able to handle the request.  Overload treatment could also include
+   rejecting the request.  For a Diameter agent, rejecting a request
+   will generally mean rejecting could be generating an appropriate
+   Diameter error response For a Diameter client, rejecting the request
+   could mean giving an indication to the entity requesting the Diameter
+   service that the network is busy and to try again later.
+
+   Stateless applications - By definition there is no relationship
+   between individual requests in a stateless application.  As a result,
+   when a request is sent or relayed to an overloaded Diameter entity --
+   either a Diameter Server or a Diameter Agent -- the sending/relaying
+   entity can choose to apply overload treatment to any request targeted
+   for the overloaded entity.
+
+   Pseudo stateful applications - Pseudo stateful applications are also
+   stateless applications in that there is no session Diameter state
+   maintained between transactions.  There is, however, an implied
+   ordering of requests.  As a result, decisions about which
+   transactions to reject as a result of an overloaded entity could/
+   should take the command-code of the request into consideration.  This
+   generally means that transactions later in the sequence of
+   transactions should be given more favorable treatment than messages
+   earlier in the sequence.  This is because more work has already been
+   done by the Diameter network for those transactions that occur later
+   in the sequence.  Rejecting them could result in increasing the load
+   on the network as the transactions earlier in the sequence might also
+   need to be repeated.
+
+   Stateful applications - Overload handling for stateful applications
+   must take into consideration the work associated with setting up an
+   maintaining a session.  As such, the entity handling overload of a
+   Diameter entity for a stateful application might tend to reject new
+   session requests before rejecting intra-session requests.  In
+   addition, session ending requests might be given a lower priority of
+   being rejected as rejecting session ending requests could result in
+   session status being out of sync between the Diameter clients and
+   servers.
+
+3.1.3.  Request Transaction Classification
+
+   Independent Request  An independent request is not a part of a
+      Diameter session and, as such, the lifetime of the session-id is
+      constrained to an individual transaction.
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 5]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+   Session-Initiating Request  A session-initiating request is the
+      initial message that establishes a Diameter session.  The ACR
+      message defined in [RFC6733] is an example of a session-initiating
+      request.
+
+   Correlated Session-Initiating Request  There are cases, most notably
+      in the 3GPP PCC architecture, where multiple Diameter sessions are
+      correlated and must be handled by the same Diameter server.  This
+      is a special case of a Session-Initiating Request.  Gx CCR-I
+      requests and Rx AAR messages are examples of correlated session-
+      initiating requests.
+
+   Intra-Session Request  An intra session request is a request that
+      uses a session-id for an already established request.  An intra
+      session request generally needs to be delivered to the server that
+      handled the session creating request for the session.  The STR
+      message defined in RFC 6733 is an example of an intra-session
+      requests.  CCR-U and CCR-T requests defined in RFC4006 are further
+      examples of intra-session requests.
+
+   Pseudo-Session Requests  Pseudo session requests are independent
+      requests and, as such, the request transactions are not tied
+      together using the Diameter session-id.  There exist Diameter
+      applications that define an expected ordering of transactions.
+      This sequencing of independent transactions results in a pseudo
+      session.  The AIR, MAR and SAR requests in the 3GPP defined Cx
+      application are examples of pseudo-session requests.
+
+3.1.4.  Request Type Overload Implications
+
+   Independent requests - Independent requests can be given equal
+   treatment when making throttling decisions.
+
+   Session-creating requests - Session-creating requests represent more
+   work than independent or intra-session requests.  As such, throttling
+   decisions might favor intra-session requests over session-creating
+   requests.  Individual session-creating requests can be given equal
+   treatment when making throttling decisions.
+
+   Correlated session-creating requests - Requests that result in a new
+   binding, where the binding is used for routing of subsequent session-
+   creating requests, represent more work than all other requests.  As
+   such, these requests might be throttled more frequently than other
+   request types.
+
+   Pseudo-session requests - Throttling decisions for pseudo-session
+   requests can take where individual requests fit into the overall
+   sequence of requests within the pseudo session.  Requests that are
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 6]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+   earlier in the sequence might be throttled more aggressively than
+   requests that occur later in the sequence.
+
+   Intra-session requests - There are two classes of intra-sessions
+   requests.  The first is a request that ends a session.  The second is
+   a request that is used to convey session related state between the
+   Diameter client and server.  Session ending request should be
+   throttled less aggressively in order to keep session state consistent
+   between the client and server.  The default handling of other intra-
+   session requests might be to treat them equally when making
+   throttling decisions.  There might also be application level
+   considerations whether some request types are favored over others.
+
+3.1.5.  Diameter Deployment Scenarios
+
+   This section discusses various Diameter network deployment scenarios
+   and the implications of those deployment models on handling of
+   overload reports.
+
+   The scenarios vary based on the following:
+
+   o  The presence or absence of Diameter agents
+
+   o  Which Diameter entities support the DOC extension
+
+   o  The amount of the network topology understood by Diameter clients
+
+   o  The complexity of the Diameter server deployment for a Diameter
+      application
+
+   o  Number of Diameter applications supported by Diameter clients and
+      Diameter servers
+
+   Without consideration for which elements support the DOC extension,
+   the following is a representative list of deployment scenarios:
+
+   o  Client --- Server
+
+   o  Client --- Multiple equivalent servers
+
+   o  Client --- Agent --- Multiple equivalent servers
+
+   o  Client --- Agent [ --- Agent ] --- Partitioned server
+
+   o  Client --- Edge Agent [ --- Edge Agent] --- { Multiple Equivalent
+      Servers | Partitioned Servers }
+
+
+
+
+
+Korhonen                  Expires March 9, 2014                 [Page 7]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
+   o  Client --- Session Correlating Agent --- Multiple Equivalent
+      Servers
+
+   The following is a list of representative deployment scenarios:
+
+   o  Direct connection between a DOC client and a DOC server
+
+   o  DOC client --- non-DOC agent --- DOC server
+
+   o  DOC client --- DOC agent --- DOC server
+
+   o  Non-DOC client --- DOC agent --- DOC server
+
+   o  Non-DOC client --- DOC agent --- Mix of DOC and non-DOC servers
+
+   o  DOC client --- agent --- Partitioned/Segmented DOC server
+
+   o  DOC client --- agent --- agent --- Partitioned/Segmented DOC
+      server
+
+   o  DOC client --- edge agent --- edge agent --- DOC server
+
+3.1.6.  Diameter Agent Behaviour
 
    In the context of the Diameter Overload Indication dissemination and
    reacting to the overload information, the functional behaviour of the
@@ -164,7 +444,7 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 
-Korhonen                  Expires March 9, 2014                 [Page 3]
+Korhonen                  Expires March 9, 2014                 [Page 8]
 
 Internet-Draft         Dimeter Overload Indication        September 2013
 
@@ -186,7 +466,7 @@ Internet-Draft         Dimeter Overload Indication        September 2013
       information received by a client would be from a given server
       identified by the Origin-Host identity.
 
-3.1.2.  Simplified Example Architecture
+3.1.7.  Simplified Example Architecture
 
    **Early Draft!**
 
@@ -220,7 +500,7 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 
-Korhonen                  Expires March 9, 2014                 [Page 4]
+Korhonen                  Expires March 9, 2014                 [Page 9]
 
 Internet-Draft         Dimeter Overload Indication        September 2013
 
@@ -276,7 +556,7 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 
-Korhonen                  Expires March 9, 2014                 [Page 5]
+Korhonen                  Expires March 9, 2014                [Page 10]
 
 Internet-Draft         Dimeter Overload Indication        September 2013
 
@@ -313,7 +593,9 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    Authorization, and Accounting (AAA) Parameters' registry:
 
    o  aaa.
+
    o  bbb.
+
    o  ccc.
 
 
@@ -330,23 +612,31 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 
 
-
-
-Korhonen                  Expires March 9, 2014                 [Page 6]
+Korhonen                  Expires March 9, 2014                [Page 11]
 
 Internet-Draft         Dimeter Overload Indication        September 2013
 
 
    o  Ben Campbell
+
    o  Eric McMurry
+
    o  Hannes Tschofenig
+
    o  Jean-Jacques Trottin
+
    o  Jouni Korhonen
+
    o  Lionel Morand
+
    o  Maria Cruz Bartolome
+
    o  Martin Dolly
+
    o  Nirav Salot
+
    o  Steve Donovan
+
    o  Susan Shishufeng
 
 
@@ -377,21 +667,18 @@ Internet-Draft         Dimeter Overload Indication        September 2013
               progress), July 2013.
 
 
+
+Korhonen                  Expires March 9, 2014                [Page 12]
+
+Internet-Draft         Dimeter Overload Indication        September 2013
+
+
 Appendix A.  Examples
 
 A.1.  3GPP S6a interface overload indication
 
    Would cover S6a MME-HSS communication with several topology choices
    (such as with or without DRA, and with "generic" agents).
-
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 7]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
 
 A.2.  3GPP PCC interfaces overload indication
 
@@ -437,12 +724,5 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 8]
+Korhonen                  Expires March 9, 2014                [Page 13]
 
