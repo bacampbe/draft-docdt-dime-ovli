@@ -69,6 +69,19 @@
             </address>
     </author>
 
+    <author initials="S" surname="Donovan" fullname="Steve Donovan">
+      <organization>Oracle</organization>
+         <address>
+                <postal>
+                    <street>17210 Campbell Road</street>
+                    <city>Dallas</city>
+                    <state>Texas</state>
+                    <code>75254</code>
+                    <country>United States</country>
+                </postal>
+                <email>srdonovan@usdonovans.com</email>
+            </address>
+    </author>
 
     <date year="2013"/>
     <area>Operations and Management</area>
@@ -103,8 +116,31 @@
 </section>
 
 <section title="Terminology and Abbreviations" anchor="abbrev">
- <t>...
- </t>
+
+ <t>Server Farm - A set of Diameter servers that can handle any request for a given Diameter applications.  While these servers support the same set of applications, they do not necessarily all have the same capacity.  An individual server farm might also support a subset of the users for a Diameter Realm. </t>
+ 
+ <t>Server Front End - A Server Front End (SFE) is a role that can be performed by a Diameter agent -- either a relay or a proxy -- that sits between Diameter clients and a Server Farm. An SFE can perform various functions for the server farm it sits in front of.  This includes some or all of the following functions:
+ <list>
+     <le>Diameter Routing</le>
+     <le>Diameter layer load balancing</le>
+     <le>Load Management</le>
+     <le>Overload Management</le>
+     <le>Topology Hiding</le>
+     <le>Server Farm Identity Management</le>
+ </list></t>
+ 
+ <t>Diameter Routing - Routing of Diameter messages addressed to either a Diameter Realm or a specific Diameter-Host.  This function is defined in RFC 6733.  Application level routing specifications that expand on RFC 6733 also exis.</t>
+ 
+ <t>Diameter-layer Load Balancing - Diameter layer load balancing allows Diameter requests to be distributed across the set of servers. Definition of this function is outside the scope of this document. </t>
+ 
+ <t>Load Management - This functionality ensures that the consolidated load state for the server farm is collected, and processed. The exact algorithm for computing the load at the SFE is implementation specific but enough semantic of the conveyed load information needs to be specified so that deterministic behavior can be ensured. </t>
+ 
+ <t>Overload Management - The SFE is the entity that understands the consolidated overload state for the server farm.  Just as it is outside the scope of this document to specify how a Diameter server calculates its overload state, it is also outside the scope of this document to specify how an SFE calculates the overload state for the set of servers.  This document describes how the SFE communicates Overload information to Diameter Clients. </t>
+
+ <t>Topology Hiding - Topology Hiding is loosely defined as ensuring that no Diameter topology information about the server farm can be discovered from Diameter messages sent outside a predefined boundary (typically administrative domain).  This includes obfuscating identifiers and address information of Diameter entities in the server farm.  It can also include hiding the number of various Diameter entities in the server farm.  Identifying information can occur in many Diameter AVPs, including Origin-Host, Destination-Host, Route-Record, Proxy-Info, Session-ID and other AVPs. </t>
+ 
+ <t>Server Farm Identity Management - Server Farm Identity Management (SFIM) is a mechanism that can be used by the SFE to present a single Diameter identity that can be used by clients to send Diameter requests to the server farm.  This requires that the SFE modifies Origin-Host information in answers coming from servers in the server farm. An agent that performs SFIM appears as a server from the client's perspective. </t>
+
 </section>
 
 
