@@ -56,10 +56,10 @@
     category="std"
      docName="draft-docdt-dime-ovli-00.txt">
   <front>
-    <title abbrev="Dimeter Overload Indication">Dimeter Overload Indication</title>
+    <title abbrev="Diameter Overload Indication">Diameter Overload Indication</title>
 
     <author role="editor" initials="J" surname="Korhonen" fullname="Jouni Korhonen">
-      <organization>Broadcom</organization>
+      <organization>Broadcom Communications</organization>
          <address>
                 <postal>
                     <street>Porkkalankatu 24</street>
@@ -111,7 +111,7 @@
 <section title="Introduction" anchor="intro">
  <t>This specification defines a base solution for the Diameter Overload
   Control. The requirements for the solution are described and discussed
-  in the corresponsing design requirements document <xref
+  in the corresponding design requirements document <xref
   target="I-D.ietf-dime-overload-reqs"/>. Note that the overload
   control solution  defined in this specification does not address all
   the requirements listed in <xref target="I-D.ietf-dime-overload-reqs"/>.
@@ -143,7 +143,7 @@
   Routing of Diameter messages addressed to either a Diameter Realm or a
   specific Diameter-Host.  This function is defined in <xref target="RFC6733"/>.
   Application level routing specifications that expand on <xref target="RFC6733"/>
-  also exis.</t>
+  also exist.</t>
  
  <t hangText="Diameter-layer Load Balancing"><vspace blankLines="1"/>
   Diameter layer load balancing allows Diameter requests to be distributed across
@@ -427,7 +427,7 @@
 
   <section title="Diameter Agent Behaviour">
    <t>In the context of the Diameter Overload Indication dissemination and reacting to
-    the overload information, the functional behaviour of the Diameter agnets in front
+    the overload information, the functional behaviour of the Diameter agents in front
     of servers, especially concerning Diameter proxies, has to be common. This is
     topical since intelligent Diameter agents may actively participate to the
     overload condition handling (such as do intelligent next hop selection based on
@@ -470,8 +470,6 @@
   </section>
 
   <section title="Simplified Example Architecture">
-   <t>**Early Draft!**
-   </t>
 
 <figure title="Simplified architecture choices for overload indication delivery">
  <artwork><![CDATA[
@@ -547,14 +545,14 @@
  <t>An overload control endpoint MAY include this AVP to indicate its
   capabilities to the other overload control endpoint. For example, the
   (client) endpoint may indicate that it support additional traffic
-  abatement algoritms than just the implicitly supported default one.
+  abatement algorithms than just the implicitly supported default one.
  </t>
  <t>During the message exchange the overload control endpoints express
   their common set of supported capabilities. The endpoint sending a
   request includes the OC-Feature-Vector AVP with those flags set that
-  correspont what it supports. The receiver who eventually sends an answer
+  correspond what it supports. The receiver who eventually sends an answer
   includes also the OC-Feature-Vector AVP with those flags set that it
-  correspont what can and selected to support with the other endpoint. 
+  correspond what can and selected to support with the other endpoint. 
  </t>
  <t>Note that when the OC-Feature-Vector AVP is used together with the
   OC-OLR AVPs, the contents of the announced features and the contents
@@ -564,7 +562,7 @@
   <t><list style="hanging"> 
    <t hangText="OLR_DEFAULT_ALGO (0x0000000000000001)"><vspace blankLines="1"/>
     When this flag is set by the overload control endpoint it means that the
-	default traffic abatement (loss) algorithm is suppoorted.
+	default traffic abatement (loss) algorithm is supported.
    </t>
   </list>
   </t>
@@ -608,9 +606,9 @@ OC-OLR ::= < AVP Header: TBD2 >
  <section title="ValidityTime AVP" anchor="valid">
   <t>The ValidityTime AVP (AVP code TBD4) is type of Unsigned32 and 
    describes the number of seconds the OC-OLR AVP and its content is
-   valid since the creation of the OC-OLR OVP.
+   valid since the creation of the OC-OLR AVP.
   </t>
-  <t>A timeout of the overload report has specific conserns that need
+  <t>A timeout of the overload report has specific concerns that need
    to be taken into account by the endpoint acting on the earlier
    received overload report(s). <xref target="redur"/> discusses the
    impacts of timeout in the scope of the traffic abatement algorithms.
@@ -625,7 +623,7 @@ OC-OLR ::= < AVP Header: TBD2 >
  
  <section title="ReportType AVP" anchor="rtype">
   <t>The ReportType AVP (AVP code TBD5) is type of Enumerated.
-   The value of the AVP describes what the overload report conserns.
+   The value of the AVP describes what the overload report concerns.
    The following values are initially defined:
   </t>
   <t><list style="hanging">
@@ -727,15 +725,133 @@ OC-Algorithm ::= < AVP Header: TBD6 >
 
 <section title="Overload Control Operation" anchor="proto">
  <section title="Overload Control Endpoints">
- </section>
+  <t>The overload control solution can be considered as an overlay
+   on top of an arbitrary Diameter network. The overload control
+   "connection" or rather two Diameter nodes exchanging overload
+   control information are called "overload control endpoints".
+   These endpoints do not need to be adjacent Diameter peer nodes,
+   nor they need to be the end-to-end Diameter nodes in a typical
+   "client-server" deployment with multiple intermediate Diameter
+   agent nodes in between. The overload control endpoint are the two
+   Diameter nodes that decide to exchange overload control information
+   between each other. How the endpoints are determined is specific
+   to a deployment, a Diameter node role in that deployment and
+   local configuration.
+  </t>
+  <t><list>
+   <t>[Editor's note: a picture illustrating the endpoint concept
+    would be useful.]
+   </t>
+  </list>
+  </t>
+</section>
 
  <section title="Piggybacking Principle">
+  <t>The overload control solution defined AVPs are essentially piggybacked
+   on top of existing application message exchanges. This is made
+   possible by adding overload control top level AVPs, the OC-OLR AVP
+   and the OC-Feature-Vector AVP into existing commands (this has an
+   assumption that the application CCF allows adding new AVPs into the
+   Diameter messages.
+  </t>
+  <t>In a case of newly defined Diameter applications, it is RECOMMENDED
+   to add and defined how overload control mechanisms works on that
+   application.
+  </t>
+  <t>Note that the overload control solution does not have fixed server
+   and client roles. The endpoint role is determined based on the sent
+   message type: whether the message is a request or an answer. Furthermore,
+   it is always possible that a request message initiating endpoint also 
+   includes its own overload report information into the OC-OLR AVP.
+   This is an optimization (and beneficial) in cases where the endpoints
+   truly use some Diameter application in a bi-directional manner.
+  </t>
  </section>
 
  <section title="Capability Negotiation">
+  <t>Since the overload control solution relies on the piggybacking
+   principle for the overload reporting and the overload control
+   endpoint are likely not adjacent peers, finding out whether the
+   other endpoint supports the overload control or what is the common
+   traffic abatement algorithm to apply for the traffic. The approach
+   defined in this specification for the end-to-end capability 
+   negotiation or rather the capability announcement relies on the
+   exchange of the OC-Feature-Vector and OC-OLR AVPs between the
+   endpoints. The negotiation solution also works when carried out
+   on existing applications. For the newly defines application the
+   negotiation can be more exact based on the application specification.
+   The negotiated set of capabilities MUST NOT change during the life
+   time of the Diameter session (or transaction in a case of non-session
+   maintaining applications).
+  </t>
+  <t>It should be noted that the 
+  </t>
+  <section title="Request Message Initiator Endpoint Considerations" anchor="nego">
+   <t>The basic principle is that the request message initiating endpoint
+    announces its support for the overload control mechanism by including in the
+    request message the OC-Feature-Vector AVP with those capability flag
+    bits set that it supports and is willing to use for this Diameter
+    session (or transaction in a case of a non-session state maintaining
+    applications). In a case of session maintaining applications the
+    request message initiating endpoint does not need to do the capability
+    announcement more than once. In a case of non-session maintaining
+    applications, it is RECOMMENDED that the request message initiating
+    endpoint includes the capability announcement into every request regardless
+    it has had prior message exchanges with the give remote endpoint.
+   </t>
+   <t>If the OC-Feature-Vector AVP does not have enough information about the
+    supported feature or the traffic abatement algorithm, then the request
+    message initiating endpoint MUST also include the OC-OLR AVP with an
+    appropriate content in it (such as a rate based abatement algorithm
+    would include the desired rate information AVPs inside the OC-OLR AVP).
+   </t>
+   <t>Once the endpoint that initiated the request message receives an answer message
+    from the remote endpoint, it can detect from the received answer message 
+	whether the remote endpoint supports the overload control solution and
+	in a case it does, what features are supported. The support for the overload
+	control solution is based on the presence of the OC-Feature-Vector and/or
+	OC-OLR AVPs for existing application. For the newly defined applications
+	the support for the overload control is already part of the application
+	specification. Based on capability knowledge the request message initiating
+	endpoint can select the preferred common traffic abatement algorithm and act
+	accordingly for the subsequent message exchanges.
+   </t>
+  </section>
+  <section title="Answer Message Initiating Endpoint Considerations">
+   <t>When a remote endpoint receives a request message in can detect whether
+    the request message initiating endpoint has support for the overload
+	control solution based on the presence of the OC-Feature-Vector AVP and
+	possibly the OC-OLR AVP. For the newly defined applications the overload
+	control solution support can be part of the application specification.
+	Based on the content of the OC-Feature-Vector AVP and optionally the
+	contents of the OC-OLR AVP, the request message receiving endpoint knows
+	what overload control functionality the other endpoint supports and then
+	act accordingly for the subsequent answer messages it initiates. It is
+	RECOMMENDED that the answer message initiating endpoint selects one common
+	traffic abatement algorithm even if it would support multiple. The answer
+	message initiating endpoint MUST NOT include any overload control solution
+	defined AVPs into its answer messages if the request message initiating
+	endpoint has not indicated support at the beginning of the the created
+	session (or transaction in a case of non-session state maintaining applications).
+   </t>
+  </section>
  </section>
 
  <section title="Protocol Extensibility" anchor="ext">
+  <t>The overload control solution can be extended, e.g. with new traffic
+   abatement algorithms or new functionality. The key aspect to remember
+   is to register the new features and algorithms in the IANA and use
+   the OC-Feature-Vector for announcing the support for the new
+   features (ee <xref target="iana"/> for the required procedures).
+  </t>
+  <t>It should be noted that <xref target="RFC6733"/> defined
+   Grouped AVP extension mechanisms also apply. This allows, for example,
+   defining a new feature that is mandatory to understand even when
+   piggybacked on an existing applications. More specifically, the sub-AVPs
+   inside the OC-OLR AVP MAY have the M-bit set. However, when overload control
+   AVPs are piggybacked on top of an existing applications, setting M-bit in
+   sub-AVPs is NOT RECOMMENDED.
+  </t>
  </section>
 
  <section title="Overload Report Processing">
@@ -743,6 +859,10 @@ OC-Algorithm ::= < AVP Header: TBD6 >
   </section>
 
   <section title="Receiver Endpoint Considerations">
+   <t>
+    [Editor's note: did we now agree that e.g. a server can refrain sending
+	 OLR in answers based on some magical algorithm?]
+   </t>
   </section>
  </section>
 </section>
@@ -793,7 +913,7 @@ AVP Values | Attribute Name                | Reference
   its initial assignments. New types can be added using the Specification
   Required policy <xref target="RFC5226"/>.
  </t>
- <t><xref target="alg-id"/> defines a new "Overload Control Algorith" registry
+ <t><xref target="alg-id"/> defines a new "Overload Control Algorithm" registry
   with its initial assignments. New types can be added using the Specification
   Required policy <xref target="RFC5226"/>.
  </t>
@@ -862,6 +982,13 @@ AVP Values | Attribute Name                | Reference
 	need to be registered with IANA. See Sections <xref target="fvec"
 	format="counter"/>, <xref target="alg-id" format="counter"/> and
 	<xref target="iana" format="counter"/> for the required IANA steps. 
+   </t>
+  </section>
+ 
+  <section title="Agent Overload">
+   <t>This specification focuses on Diameter end-point (server or client) overload.
+    A separate extension will be required to outline the handling the case of
+    agent overload.
    </t>
   </section>
  </section>
