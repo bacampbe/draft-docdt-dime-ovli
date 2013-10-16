@@ -2,10 +2,10 @@
 
 
 Diameter Maintenance and Extensions                     J. Korhonen, Ed.
-(DIME)                                                    Renesas Mobile
-Internet-Draft                                         September 5, 2013
-Intended status: Standards Track
-Expires: March 9, 2014
+(DIME)                                                          Broadcom
+Internet-Draft                                                S. Donovan
+Intended status: Standards Track                                  Oracle
+Expires: April 19, 2014                                 October 16, 2013
 
 
                       Dimeter Overload Indication
@@ -13,8 +13,8 @@ Expires: March 9, 2014
 
 Abstract
 
-   This specification documents a Diameter Overload Control Indication
-   and the dissemination of the overload indication information.
+   This specification documents a Diameter Overload Control base
+   solution and the dissemination of the overload report information.
 
 Requirements
 
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 9, 2014.
+   This Internet-Draft will expire on April 19, 2014.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Korhonen                  Expires March 9, 2014                 [Page 1]
+Korhonen & Donovan       Expires April 19, 2014                 [Page 1]
 
-Internet-Draft         Dimeter Overload Indication        September 2013
+Internet-Draft         Dimeter Overload Indication          October 2013
 
 
    to this document.  Code Components extracted from this document must
@@ -65,66 +65,220 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 Table of Contents
 
-   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
-   2.  Terminology and Abbreviations  . . . . . . . . . . . . . . . .  3
-   3.  Solution Overview  . . . . . . . . . . . . . . . . . . . . . .  3
-     3.1.  Architectural Assumptions  . . . . . . . . . . . . . . . .  3
-       3.1.1.  Application Classification . . . . . . . . . . . . . .  3
-       3.1.2.  Application Type Overload Implications . . . . . . . .  4
-       3.1.3.  Request Transaction Classification . . . . . . . . . .  5
-       3.1.4.  Request Type Overload Implications . . . . . . . . . .  6
-       3.1.5.  Diameter Deployment Scenarios  . . . . . . . . . . . .  7
-       3.1.6.  Diameter Agent Behaviour . . . . . . . . . . . . . . .  8
-       3.1.7.  Simplified Example Architecture  . . . . . . . . . . .  9
-     3.2.  Clarifications to Diameter Base Protocol . . . . . . . . . 10
-     3.3.  Dissemination of the Overload Indication . . . . . . . . . 10
-       3.3.1.  Negotiation and Versioning . . . . . . . . . . . . . . 10
-       3.3.2.  Transmission of the Attribute Value Pairs  . . . . . . 10
-     3.4.  Overload Condition Indication  . . . . . . . . . . . . . . 10
-   4.  Attribute Value Pairs  . . . . . . . . . . . . . . . . . . . . 10
-     4.1.  xyz AVP  . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     4.2.  abc AVP  . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     4.3.  Attribute Value Pair flag rules  . . . . . . . . . . . . . 10
-   5.  Transport Considerations . . . . . . . . . . . . . . . . . . . 11
-   6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 11
-     6.1.  AVP codes  . . . . . . . . . . . . . . . . . . . . . . . . 11
-     6.2.  Result-Code values . . . . . . . . . . . . . . . . . . . . 11
-     6.3.  New registries . . . . . . . . . . . . . . . . . . . . . . 11
-   7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 11
-   8.  Design Team Members  . . . . . . . . . . . . . . . . . . . . . 11
-   9.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 12
-   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 12
-     10.1. Normative References . . . . . . . . . . . . . . . . . . . 12
-     10.2. Informative References . . . . . . . . . . . . . . . . . . 12
-   Appendix A.  Examples  . . . . . . . . . . . . . . . . . . . . . . 13
-     A.1.  3GPP S6a interface overload indication . . . . . . . . . . 13
-     A.2.  3GPP PCC interfaces overload indication  . . . . . . . . . 13
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 13
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  4
+   2.  Terminology and Abbreviations  . . . . . . . . . . . . . . . .  4
+   3.  Solution Overview  . . . . . . . . . . . . . . . . . . . . . .  6
+     3.1.  Architectural Assumptions  . . . . . . . . . . . . . . . .  6
+       3.1.1.  Application Classification . . . . . . . . . . . . . .  6
+       3.1.2.  Application Type Overload Implications . . . . . . . .  7
+       3.1.3.  Request Transaction Classification . . . . . . . . . .  8
+       3.1.4.  Request Type Overload Implications . . . . . . . . . .  9
+       3.1.5.  Diameter Deployment Scenarios  . . . . . . . . . . . . 10
+       3.1.6.  Diameter Agent Behaviour . . . . . . . . . . . . . . . 11
+       3.1.7.  Simplified Example Architecture  . . . . . . . . . . . 12
+     3.2.  Clarifications to Diameter Base Protocol . . . . . . . . . 12
+       3.2.1.  DIAMETER_TOO_BUSY clarifications . . . . . . . . . . . 12
+     3.3.  Dissemination of the Overload Indication . . . . . . . . . 12
+       3.3.1.  Negotiation and Versioning . . . . . . . . . . . . . . 12
+       3.3.2.  Transmission of the Attribute Value Pairs  . . . . . . 12
+     3.4.  Overload Condition Indication  . . . . . . . . . . . . . . 13
+   4.  Attribute Value Pairs  . . . . . . . . . . . . . . . . . . . . 13
+     4.1.  OC-Feature-Vector AVP  . . . . . . . . . . . . . . . . . . 13
+     4.2.  OC-OLR AVP . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.3.  TimeStamp AVP  . . . . . . . . . . . . . . . . . . . . . . 14
+     4.4.  ValidityTime AVP . . . . . . . . . . . . . . . . . . . . . 14
+     4.5.  ReportType AVP . . . . . . . . . . . . . . . . . . . . . . 14
+     4.6.  OC-Algorithm AVP . . . . . . . . . . . . . . . . . . . . . 15
+     4.7.  Algorithm-ID AVP . . . . . . . . . . . . . . . . . . . . . 15
+     4.8.  Reduction-Percentage AVP . . . . . . . . . . . . . . . . . 15
+     4.9.  Attribute Value Pair flag rules  . . . . . . . . . . . . . 16
+   5.  Overload Control Operation . . . . . . . . . . . . . . . . . . 16
+     5.1.  Overload Control Endpoints . . . . . . . . . . . . . . . . 16
+     5.2.  Piggybacking Principle . . . . . . . . . . . . . . . . . . 16
+     5.3.  Capability Negotiation . . . . . . . . . . . . . . . . . . 16
+     5.4.  Protocol Extensibility . . . . . . . . . . . . . . . . . . 16
+     5.5.  Overload Report Processing . . . . . . . . . . . . . . . . 17
+       5.5.1.  Sender Endpoint Considerations . . . . . . . . . . . . 17
+       5.5.2.  Receiver Endpoint Considerations . . . . . . . . . . . 17
+   6.  Transport Considerations . . . . . . . . . . . . . . . . . . . 17
+   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 17
+     7.1.  AVP codes  . . . . . . . . . . . . . . . . . . . . . . . . 17
+     7.2.  New registries . . . . . . . . . . . . . . . . . . . . . . 17
+   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 18
 
 
 
-
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 2]
+Korhonen & Donovan       Expires April 19, 2014                 [Page 2]
 
-Internet-Draft         Dimeter Overload Indication        September 2013
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+   9.  Design Team Members  . . . . . . . . . . . . . . . . . . . . . 18
+   10. Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 18
+   11. References . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+     11.1. Normative References . . . . . . . . . . . . . . . . . . . 18
+     11.2. Informative References . . . . . . . . . . . . . . . . . . 19
+   Appendix A.  Issues left for future specifications . . . . . . . . 19
+     A.1.  Additional traffic abatement algorithms  . . . . . . . . . 19
+   Appendix B.  Examples  . . . . . . . . . . . . . . . . . . . . . . 19
+     B.1.  3GPP S6a interface overload indication . . . . . . . . . . 19
+     B.2.  3GPP PCC interfaces overload indication  . . . . . . . . . 19
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 19
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 3]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
 
 
 1.  Introduction
 
-   ...
-
-   We also need to describe carefully what is in the scope of this
-   document and what is left for the future documents.  Maybe this
-   deserves a new subsection?
+   This specification defines a base solution for the Diameter Overload
+   Control.  The requirements for the solution are described and
+   discussed in the corresponsing design requirements document
+   [I-D.ietf-dime-overload-reqs].  Note that the overload control
+   solution defined in this specification does not address all the
+   requirements listed in [I-D.ietf-dime-overload-reqs].  A number of
+   overload control related features are left for the future
+   specifications.  See Appendix A for more detailed discussion on
+   those.
 
 
 2.  Terminology and Abbreviations
 
-   ...
+   Server Farm
+
+      A set of Diameter servers that can handle any request for a given
+      Diameter applications.  While these servers support the same set
+      of applications, they do not necessarily all have the same
+      capacity.  An individual server farm might also support a subset
+      of the users for a Diameter Realm.
+
+   Server Front End
+
+      A Server Front End (SFE) is a role that can be performed by a
+      Diameter agent -- either a relay or a proxy -- that sits between
+      Diameter clients and a Server Farm.  An SFE can perform various
+      functions for the server farm it sits in front of.  This includes
+      some or all of the following functions:
+
+      *  Diameter Routing
+
+      *  Diameter layer load balancing
+
+      *  Load Management
+
+      *  Overload Management
+
+      *  Topology Hiding
+
+      *  Server Farm Identity Management
+
+   Diameter Routing
+
+      Routing of Diameter messages addressed to either a Diameter Realm
+      or a specific Diameter-Host.  This function is defined in
+      [RFC6733].  Application level routing specifications that expand
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 4]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+      on [RFC6733] also exis.
+
+   Diameter-layer Load Balancing
+
+      Diameter layer load balancing allows Diameter requests to be
+      distributed across the set of servers.  Definition of this
+      function is outside the scope of this document.
+
+   Load Management
+
+      This functionality ensures that the consolidated load state for
+      the server farm is collected, and processed.  The exact algorithm
+      for computing the load at the SFE is implementation specific but
+      enough semantic of the conveyed load information needs to be
+      specified so that deterministic behavior can be ensured.
+
+   Overload Management
+
+      The SFE is the entity that understands the consolidated overload
+      state for the server farm.  Just as it is outside the scope of
+      this document to specify how a Diameter server calculates its
+      overload state, it is also outside the scope of this document to
+      specify how an SFE calculates the overload state for the set of
+      servers.  This document describes how the SFE communicates
+      Overload information to Diameter Clients.
+
+   Topology Hiding
+
+      Topology Hiding is loosely defined as ensuring that no Diameter
+      topology information about the server farm can be discovered from
+      Diameter messages sent outside a predefined boundary (typically
+      administrative domain).  This includes obfuscating identifiers and
+      address information of Diameter entities in the server farm.  It
+      can also include hiding the number of various Diameter entities in
+      the server farm.  Identifying information can occur in many
+      Diameter AVPs, including Origin-Host, Destination-Host, Route-
+      Record, Proxy-Info, Session-ID and other AVPs.
+
+   Server Farm Identity Management
+
+      Server Farm Identity Management (SFIM) is a mechanism that can be
+      used by the SFE to present a single Diameter identity that can be
+      used by clients to send Diameter requests to the server farm.
+      This requires that the SFE modifies Origin-Host information in
+      answers coming from servers in the server farm.  An agent that
+      performs SFIM appears as a server from the client's perspective.
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 5]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
 
 
 3.  Solution Overview
@@ -142,7 +296,7 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    into decisions made by the Diameter identity responsible for handling
    overload reports.
 
-   Section 8.1 of RFC6733 defines two state machines that imply two
+   Section 8.1 of [RFC6733] defines two state machines that imply two
    types of applications, session-less and session-based.  The primary
    differentiator between these types of applications is the lifetime of
    Session-IDs.
@@ -161,14 +315,6 @@ Internet-Draft         Dimeter Overload Indication        September 2013
       "Between the MME and the HSS and between the SGSN and the HSS and
       between the MME and the EIR, Diameter sessions shall be implicitly
       terminated.  An implicitly terminated session is one for which the
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 3]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
       server does not maintain state information.  The client shall not
       send any re-authorization or session termination requests to the
       server.
@@ -183,24 +329,32 @@ Internet-Draft         Dimeter Overload Indication        September 2013
       maintain any state information about this session and the client
       shall not send any session termination request.  Neither the
       Authorization-Lifetime AVP nor the Session-Timeout AVP shall be
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 6]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
       present in requests or responses."
 
    For the purposes of this discussion, session-less applications are
    further divided into two types of applications:
 
-   o  Stateless applications - Requests within a stateless application
-      have no relationship to each other.  The 3GPP defined S13
-      application is an example of a stateless application.
+   Stateless applications  Requests within a stateless application have
+      no relationship to each other.  The 3GPP defined S13 application
+      is an example of a stateless application.
 
-   o  Pseudo-session applications - While this class of application does
-      not use the Diameter Session-ID AVP to correlate requests, there
-      is an implied ordering of transactions defined by the application.
-      The 3GPP defined Cx application is an example of a pseudo-session
+   Pseudo-session applications  While this class of application does not
+      use the Diameter Session-ID AVP to correlate requests, there is an
+      implied ordering of transactions defined by the application.  The
+      3GPP defined Cx application is an example of a pseudo-session
       application.
 
-   The accounting application defined in RFC6733 and the Credit-Control
-   application defined in RFC4006 are examples of Diameter session-based
-   applications.
+   The accounting application defined in [RFC6733] and the Credit-
+   Control application defined in [RFC4006] are examples of Diameter
+   session-based applications.
 
    The handling of overload reports must take the type of application
    into consideration, as discussed in section xxxxx.
@@ -217,14 +371,6 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    These discussions assume that the strategy for mitigating the
    reported overload is to reduce the overall workload on the overloaded
    entity.  The concept of applying overload treatment to requests
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 4]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
    targeted for an overloaded Diameter entity is inherent to this
    discussion.  The overload treatment is not specified here but could
    include routing the request to another Diameter entity known to be
@@ -235,51 +381,54 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    could mean giving an indication to the entity requesting the Diameter
    service that the network is busy and to try again later.
 
-   Stateless applications - By definition there is no relationship
-   between individual requests in a stateless application.  As a result,
-   when a request is sent or relayed to an overloaded Diameter entity --
-   either a Diameter Server or a Diameter Agent -- the sending/relaying
-   entity can choose to apply overload treatment to any request targeted
-   for the overloaded entity.
 
-   Pseudo stateful applications - Pseudo stateful applications are also
-   stateless applications in that there is no session Diameter state
-   maintained between transactions.  There is, however, an implied
-   ordering of requests.  As a result, decisions about which
-   transactions to reject as a result of an overloaded entity could/
-   should take the command-code of the request into consideration.  This
-   generally means that transactions later in the sequence of
-   transactions should be given more favorable treatment than messages
-   earlier in the sequence.  This is because more work has already been
-   done by the Diameter network for those transactions that occur later
-   in the sequence.  Rejecting them could result in increasing the load
-   on the network as the transactions earlier in the sequence might also
-   need to be repeated.
 
-   Stateful applications - Overload handling for stateful applications
-   must take into consideration the work associated with setting up an
-   maintaining a session.  As such, the entity handling overload of a
-   Diameter entity for a stateful application might tend to reject new
-   session requests before rejecting intra-session requests.  In
-   addition, session ending requests might be given a lower priority of
-   being rejected as rejecting session ending requests could result in
-   session status being out of sync between the Diameter clients and
-   servers.
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 7]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+   Stateless applications  By definition there is no relationship
+      between individual requests in a stateless application.  As a
+      result, when a request is sent or relayed to an overloaded
+      Diameter entity - either a Diameter Server or a Diameter Agent -
+      the sending/relaying entity can choose to apply overload treatment
+      to any request targeted for the overloaded entity.
+
+   Pseudo stateful applications  Pseudo stateful applications are also
+      stateless applications in that there is no session Diameter state
+      maintained between transactions.  There is, however, an implied
+      ordering of requests.  As a result, decisions about which
+      transactions to reject as a result of an overloaded entity could/
+      should take the command-code of the request into consideration.
+      This generally means that transactions later in the sequence of
+      transactions should be given more favorable treatment than
+      messages earlier in the sequence.  This is because more work has
+      already been done by the Diameter network for those transactions
+      that occur later in the sequence.  Rejecting them could result in
+      increasing the load on the network as the transactions earlier in
+      the sequence might also need to be repeated.
+
+   Stateful applications  Overload handling for stateful applications
+      must take into consideration the work associated with setting up
+      an maintaining a session.  As such, the entity handling overload
+      of a Diameter entity for a stateful application might tend to
+      reject new session requests before rejecting intra-session
+      requests.  In addition, session ending requests might be given a
+      lower priority of being rejected as rejecting session ending
+      requests could result in session status being out of sync between
+      the Diameter clients and servers.
 
 3.1.3.  Request Transaction Classification
 
    Independent Request  An independent request is not a part of a
       Diameter session and, as such, the lifetime of the session-id is
       constrained to an individual transaction.
-
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 5]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
 
    Session-Initiating Request  A session-initiating request is the
       initial message that establishes a Diameter session.  The ACR
@@ -292,6 +441,13 @@ Internet-Draft         Dimeter Overload Indication        September 2013
       is a special case of a Session-Initiating Request.  Gx CCR-I
       requests and Rx AAR messages are examples of correlated session-
       initiating requests.
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 8]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
 
    Intra-Session Request  An intra session request is a request that
       uses a session-id for an already established request.  An intra
@@ -329,14 +485,6 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    Pseudo-session requests - Throttling decisions for pseudo-session
    requests can take where individual requests fit into the overall
    sequence of requests within the pseudo session.  Requests that are
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 6]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
    earlier in the sequence might be throttled more aggressively than
    requests that occur later in the sequence.
 
@@ -349,6 +497,13 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    session requests might be to treat them equally when making
    throttling decisions.  There might also be application level
    considerations whether some request types are favored over others.
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                 [Page 9]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
 
 3.1.5.  Diameter Deployment Scenarios
 
@@ -384,15 +539,6 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    o  Client --- Edge Agent [ --- Edge Agent] --- { Multiple Equivalent
       Servers | Partitioned Servers }
 
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 7]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
    o  Client --- Session Correlating Agent --- Multiple Equivalent
       Servers
 
@@ -405,6 +551,15 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    o  DOC client --- DOC agent --- DOC server
 
    o  Non-DOC client --- DOC agent --- DOC server
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 10]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
 
    o  Non-DOC client --- DOC agent --- Mix of DOC and non-DOC servers
 
@@ -440,15 +595,6 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    break or assume functionality beyond the Diameter base protocol.
    Effectively this means the following from a Diameter agent:
 
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 8]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
    o  A Diameter agent that impersonates itself as the "end node", i.e.
       the server to a Diameter client MUST NOT leak any Diameter base
       protocol level information of the Diameter nodes behind it.  From
@@ -463,6 +609,14 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    o  This requirement also implies that if the Diameter agent is not
       able to impersonate the servers behind it, the Diameter dialogue
       is always established between clients and servers and any overload
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 11]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
       information received by a client would be from a given server
       identified by the Origin-Host identity.
 
@@ -494,18 +648,9 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
      Simplified architecture choices for overload indication delivery
 
-
-
-
-
-
-
-Korhonen                  Expires March 9, 2014                 [Page 9]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
-
 3.2.  Clarifications to Diameter Base Protocol
+
+3.2.1.  DIAMETER_TOO_BUSY clarifications
 
    Describe here, assuming there is a need, what parts of the existing
    Diameter Base Protocol [RFC6733] needs clarification in the even of
@@ -520,6 +665,14 @@ Internet-Draft         Dimeter Overload Indication        September 2013
 
 3.3.2.  Transmission of the Attribute Value Pairs
 
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 12]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
 3.4.  Overload Condition Indication
 
    Describe here what the overload condition indication is about.
@@ -530,92 +683,285 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    This section describes the encoding and semantics of Overload
    Indication Attribute Value Pairs (AVPs).
 
-4.1.  xyz AVP
+4.1.  OC-Feature-Vector AVP
 
-   ...
+   The OC-Feature-Vector AVP (AVP code TBD1) is type of Unsigned64 and
+   contains a 64 bit flags field of supported capabilities of an
+   overload control endpoint.  Sending and receiving the OC-Feature-
+   Vector AVP with value 0 MUST be supported, although that does not
+   provide much guidance about specific capabilities of the endpoint.
 
-4.2.  abc AVP
+   An overload control endpoint MAY include this AVP to indicate its
+   capabilities to the other overload control endpoint.  For example,
+   the (client) endpoint may indicate that it support additional traffic
+   abatement algoritms than just the implicitly supported default one.
 
-   ...
+   During the message exchange the overload control endpoints express
+   their common set of supported capabilities.  The endpoint sending a
+   request includes the OC-Feature-Vector AVP with those flags set that
+   correspont what it supports.  The receiver who eventually sends an
+   answer includes also the OC-Feature-Vector AVP with those flags set
+   that it correspont what can and selected to support with the other
+   endpoint.
 
-4.3.  Attribute Value Pair flag rules
+   Note that when the OC-Feature-Vector AVP is used together with the
+   OC-OLR AVPs, the contents of the announced features and the contents
+   of the OC-OLR AVPs MUST NOT contradict each other.
 
-                                                       +---------+
-                                                       |AVP flag |
-                                                       |rules    |
-                                                       +----+----+
-                     AVP   Section                     |    |MUST|
-    Attribute Name   Code  Defined  Value Type         |MUST| NOT|
-   +---------------------------------------------------+----+----+
-   |abc              TBD3  x.x      Grouped            |    | V  |
-   +---------------------------------------------------+----+----+
-   |xyz              TBD4  x.x      Unsigned32         |    | V  |
-   +---------------------------------------------------+----+----+
+   The following capabilities are defined in this document:
+
+   OLR_DEFAULT_ALGO (0x0000000000000001)
+
+      When this flag is set by the overload control endpoint it means
+      that the default traffic abatement (loss) algorithm is suppoorted.
+
+4.2.  OC-OLR AVP
+
+   The OC-OLR AVP (AVP code TBD2) is type of Grouped and contains the
+   necessary information to compose an overload report and/or e.g.,
+   indicate a set of supported algorithms.
 
 
 
 
-
-Korhonen                  Expires March 9, 2014                [Page 10]
+Korhonen & Donovan       Expires April 19, 2014                [Page 13]
 
-Internet-Draft         Dimeter Overload Indication        September 2013
+Internet-Draft         Dimeter Overload Indication          October 2013
 
 
-5.  Transport Considerations
+   The TimeStamp AVP indicates when the original OC-OLR AVP with the
+   current content was created.  It is possible to replay the same OC-
+   OLR AVP multiple times between the overload endpoints, however, as
+   long as the OC-OLR AVP content changes or the other information
+   sending endpoint wants the receiving endpoint to update its overload
+   control information, then the TimeStamp AVP MUST contain a new value.
 
-   If anything needs to be said beyond what has been defined in
-   Section 3.3.  One candidate is, e.g. the use of SCTP Payload Protocol
-   Identifier (PPID).  Also one might spend some more time discussion
-   the implications of agents between the "client" and the "server".
+   OC-OLR ::= < AVP Header: TBD2 >
+              < TimeStamp >
+              [ ValidityTime ]
+              [ ReportType ]
+            * [ OC-Algorithm ]
+            * [ AVP ]
+
+4.3.  TimeStamp AVP
+
+   The TimeStamp AVP (AVP code TBD3) is type of Time.  Its usage in the
+   context of the overload control is described in Section 4.2.  From
+   the functionality point of view, the TimeStamp AVP is merely used as
+   a non-volatile increasing counter between two overload control
+   endpoints.
+
+4.4.  ValidityTime AVP
+
+   The ValidityTime AVP (AVP code TBD4) is type of Unsigned32 and
+   describes the number of seconds the OC-OLR AVP and its content is
+   valid since the creation of the OC-OLR OVP.
+
+   A timeout of the overload report has specific conserns that need to
+   be taken into account by the endpoint acting on the earlier received
+   overload report(s).  Section 4.8 discusses the impacts of timeout in
+   the scope of the traffic abatement algorithms.
+
+   As a general guidance for implementations it is RECOMMENDED never let
+   any overload report to timeout.  Rather, an overload endpoint should
+   explicitly signal, e.g. the end of overload condition.  This leaves
+   no room for the other overload endpoint to reason or guess the
+   condition the other endpoint is at.
+
+4.5.  ReportType AVP
+
+   The ReportType AVP (AVP code TBD5) is type of Enumerated.  The value
+   of the AVP describes what the overload report conserns.  The
+   following values are initially defined:
 
 
-6.  IANA Considerations
 
-6.1.  AVP codes
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 14]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+   0  Reserved.
+
+   1  Host originated/concerning report.
+
+   2  Realm concerning (aggregated) report.
+
+4.6.  OC-Algorithm AVP
+
+   The OC-Algorithm AVP (AVP code TBD6) is type of Grouped.  The AVP
+   contains the necessary sub-AVPs and information for the use for the
+   traffic abatement algorithm.
+
+   This specification defines one default algorithm (see Section 4.1 for
+   the OC-Feature-Vector flag corresponding to the algorithm).  The
+   default (loss) algorithm
+
+   OC-Algorithm ::= < AVP Header: TBD6 >
+                    < Algorithm-ID >
+                    { Reduction-Percentage }
+                  * [ AVP ]
+
+4.7.  Algorithm-ID AVP
+
+   The Algorithm-ID AVP (AVP code TBD7) is type of Enumerated and
+   identifies the traffic abatement algorithm the OC-Algorithm AVP
+   "describes" and implements.  This specification defines the following
+   algorithms:
+
+   0  Reserved.
+
+   1  Default (loss) algorithm.
+
+4.8.  Reduction-Percentage AVP
+
+   The Reduction-Percentage AVP (AVP code TBD8) is type of Unsigned32
+   and describes the percentage of the traffic (compared to the earlier,
+   determined by the information sender) what the sender of this
+   percentage information is expecting to receive in the future.
+
+   The value of the Reduction-Percentage AVP is between zero (0) and one
+   hundred (100).  Values greater than 100 are interpreted as 100.  The
+   value of 100 means that no traffic is expected, i.e. the sender of
+   the information is under a severe load and ceases to process any new
+   messages.  The value of 0 means that the sender of the information is
+   in a stable state and has no requests to the other endpoint to apply
+   any traffic abatement.
+
+   If an overload control endpoint comes out of the 100 percent traffic
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 15]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+   reduction as a result of the overload report timing out, the
+   following concerns are RECOMMENDED to be applied.  The endpoint
+   sending the traffic should be conservative and, for example, first
+   send few "probe" messages to learn the overload condition of the
+   other endpoint before converging to any traffic amount/rate decided
+   by the sender.  Similar concerns actually apply in all cases when the
+   overload report times out unless the previous overload report stated
+   0 percent reduction.
+
+4.9.  Attribute Value Pair flag rules
+
+                                                      +---------+
+                                                      |AVP flag |
+                                                      |rules    |
+                                                      +----+----+
+                      AVP   Section                   |    |MUST|
+    Attribute Name    Code  Defined  Value Type       |MUST| NOT|
+   +--------------------------------------------------+----+----+
+   |OC-Feature-Vector TBD1  x.x      Unsigned64       |    | V  |
+   +--------------------------------------------------+----+----+
+   |OC-OLR            TBD2  x.x      Grouped          |    | V  |
+   +--------------------------------------------------+----+----+
+   |TimeStamp         TBD3  x.x      Time             |    | V  |
+   +--------------------------------------------------+----+----+
+   |ValidityTime      TBD4  x.x      Unsigned32       |    | V  |
+   +--------------------------------------------------+----+----+
+   |ReportType        TBD5  x.x      Enumerated       |    | V  |
+   +--------------------------------------------------+----+----+
+   |OC-Algorithm      TBD6  x.x      Grouped          |    | V  |
+   +--------------------------------------------------+----+----+
+   |Algorithm-ID      TBD7  x.x      Enumerated       |    | V  |
+   +--------------------------------------------------+----+----+
+   |Reduction                                         |    |    |
+   |  -Percentage     TBD8  x.x      Unsigned32       |    | V  |
+   +--------------------------------------------------+----+----+
+
+
+5.  Overload Control Operation
+
+5.1.  Overload Control Endpoints
+
+5.2.  Piggybacking Principle
+
+5.3.  Capability Negotiation
+
+5.4.  Protocol Extensibility
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 16]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+5.5.  Overload Report Processing
+
+5.5.1.  Sender Endpoint Considerations
+
+5.5.2.  Receiver Endpoint Considerations
+
+
+6.  Transport Considerations
+
+   In order to reduce overload control introduced additional AVP and
+   message processing it might be desirable/beneficial to signal whether
+   the Diameter command carries overload control information that should
+   be of interest of an overload aware Diameter node.
+
+   Should such indication be include is not part of this specification.
+   It has not either been concluded at what layer such possible
+   indication should be.  Obvious candidates include transport layer
+   protocols (e.g., SCTP PPID or TCP flags) or Diameter command header
+   flags.
+
+
+7.  IANA Considerations
+
+7.1.  AVP codes
 
    New AVPs defined by this specification are listed in Section 4.  All
    AVP codes allocated from the 'Authentication, Authorization, and
    Accounting (AAA) Parameters' AVP Codes registry.
 
-6.2.  Result-Code values
+7.2.  New registries
 
-   This specification adds...:
+   Three new registries are needed under the 'Authentication,
+   Authorization, and Accounting (AAA) Parameters' registry.
 
-   AVP Values | Attribute Name                | Reference
-   -----------+-------------------------------+----------
-    5xxx      | DIAMETER_xx                   | RFCxxxx
-    5xxx      | DIAMETER_xx                   | RFCxxxx
-    5xxx      | DIAMETER_xx                   | RFCxxxx
+   Section 4.1 defines a new "Overload Control Feature Vector" registry
+   including the initial assignments.  New values can be added into the
+   registry using the Specification Required policy [RFC5226].
 
-6.3.  New registries
+   Section 4.5 defines a new "Overload Report Type" registry with its
+   initial assignments.  New types can be added using the Specification
+   Required policy [RFC5226].
 
-   XYZ new registries are needed under the 'Authentication,
-   Authorization, and Accounting (AAA) Parameters' registry:
-
-   o  aaa.
-
-   o  bbb.
-
-   o  ccc.
+   Section 4.7 defines a new "Overload Control Algorith" registry with
+   its initial assignments.  New types can be added using the
+   Specification Required policy [RFC5226].
 
 
-7.  Security Considerations
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 17]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+8.  Security Considerations
 
    No end to end security.  We need to live with that.
 
 
-8.  Design Team Members
+9.  Design Team Members
 
    This document is a product of the following Diameter Overload Control
    Design Team members:
-
-
-
-
-Korhonen                  Expires March 9, 2014                [Page 11]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
-
 
    o  Ben Campbell
 
@@ -640,14 +986,14 @@ Internet-Draft         Dimeter Overload Indication        September 2013
    o  Susan Shishufeng
 
 
-9.  Acknowledgements
+10.  Acknowledgements
 
    ...
 
 
-10.  References
+11.  References
 
-10.1.  Normative References
+11.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -656,39 +1002,73 @@ Internet-Draft         Dimeter Overload Indication        September 2013
               IANA Considerations Section in RFCs", BCP 26, RFC 5226,
               May 2008.
 
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 18]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
    [RFC6733]  Fajardo, V., Arkko, J., Loughney, J., and G. Zorn,
               "Diameter Base Protocol", RFC 6733, October 2012.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [I-D.ietf-dime-overload-reqs]
               McMurry, E. and B. Campbell, "Diameter Overload Control
-              Requirements", draft-ietf-dime-overload-reqs-10 (work in
-              progress), July 2013.
+              Requirements", draft-ietf-dime-overload-reqs-13 (work in
+              progress), September 2013.
+
+   [RFC4006]  Hakala, H., Mattila, L., Koskinen, J-P., Stura, M., and J.
+              Loughney, "Diameter Credit-Control Application", RFC 4006,
+              August 2005.
 
 
+Appendix A.  Issues left for future specifications
 
-Korhonen                  Expires March 9, 2014                [Page 12]
-
-Internet-Draft         Dimeter Overload Indication        September 2013
+   The base solution for the overload control does not cover all
+   possible use cases.  A number of solution aspects were intentionally
+   left for future specification and protocol work.
+
+A.1.  Additional traffic abatement algorithms
+
+   This specification describes only means for a simple loss based
+   algorithm.  Future algorithms can be added using the designed
+   solution extension mechanism.  The new algorithms need to be
+   registered with IANA.  See Sections 4.1, 4.7 and 7 for the required
+   IANA steps.
 
 
-Appendix A.  Examples
+Appendix B.  Examples
 
-A.1.  3GPP S6a interface overload indication
+B.1.  3GPP S6a interface overload indication
 
    Would cover S6a MME-HSS communication with several topology choices
    (such as with or without DRA, and with "generic" agents).
 
-A.2.  3GPP PCC interfaces overload indication
+B.2.  3GPP PCC interfaces overload indication
 
    Would cover Gx/Rx and maybe S9..
 
 
-Author's Address
+
+
+
+
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 19]
+
+Internet-Draft         Dimeter Overload Indication          October 2013
+
+
+Authors' Addresses
 
    Jouni Korhonen (editor)
-   Renesas Mobile
+   Broadcom
    Porkkalankatu 24
    Helsinki  FIN-00180
    Finland
@@ -696,6 +1076,13 @@ Author's Address
    Email: jouni.nospam@gmail.com
 
 
+   Steve Donovan
+   Oracle
+   17210 Campbell Road
+   Dallas, Texas  75254
+   United States
+
+   Email: srdonovan@usdonovans.com
 
 
 
@@ -724,5 +1111,10 @@ Author's Address
 
 
 
-Korhonen                  Expires March 9, 2014                [Page 13]
+
+
+
+
+
+Korhonen & Donovan       Expires April 19, 2014                [Page 20]
 
